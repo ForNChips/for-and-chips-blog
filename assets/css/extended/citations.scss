@@ -1,0 +1,85 @@
+/* ── Citation block (article single page) ───────────── */
+.citation-block {
+  margin: 2.5rem 0 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--tertiary);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  background: var(--entry);
+}
+
+.citation-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  margin: 0 0 0.5rem;
+}
+
+.citation-text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--content);
+  margin: 0 0 0.75rem;
+  font-style: italic;
+  word-break: break-word;
+}
+
+.citation-copy-btn {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--accent);
+    color: var(--button-text);
+  }
+}
+
+/* ── Inline citation links (within article body) ─────── */
+.cite-link {
+  color: var(--accent);
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.cite-missing {
+  color: var(--secondary);
+  font-style: italic;
+  cursor: help;
+}
+
+.bibliography-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+
+  .bibliography-entry {
+    margin-bottom: 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--content);
+    padding-left: 2rem;
+    text-indent: -2rem;
+
+    .ref-authors { font-weight: 600; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+
+    .ref-missing {
+      color: var(--secondary);
+      font-style: italic;
+    }
+  }
+}

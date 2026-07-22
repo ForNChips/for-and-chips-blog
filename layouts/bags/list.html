@@ -1,0 +1,130 @@
+{{ define "main" }}
+
+{{/* ─────────────────────────────────────────────────────────────
+     /bags/        → index of all bags (children of this section)
+     /bags/<slug>/ → single bag : prose from _index.md + article list
+     ───────────────────────────────────────────────────────────── */}}
+
+{{- $isRoot := eq .Path "/bags" -}}
+
+<main class="bags-page">
+
+  {{- if $isRoot }}
+
+    {{/* ===== Bags index ===== */}}
+    <h1>{{ .Title }}</h1>
+
+    {{- if .Content }}
+    <div class="bags-intro">{{ .Content }}</div>
+    {{- end }}
+
+    {{ partial "search_bar.html" (dict "placeholder" "Search bags") }}
+
+    {{/* Pre-compute, for every bag:
+           - $bagTags[<slug>]     = sorted unique slice of member tags
+           - $tagFreq[<tag>]      = number of bags carrying that tag
+         so we can (a) render data-tags on each .bag-card and
+                   (b) feed the flavours partial with a real frequency map. */}}
+    {{- $allArticles := where site.RegularPages "Type" "article" -}}
+    {{- $bagTags := dict -}}
+    {{- $tagFreq := dict -}}
+    {{- range .Sections -}}
+      {{- $slug := path.Base .Path -}}
+      {{- $field := printf "Params.bags.%s" $slug -}}
+      {{- $members := where $allArticles $field "ne" nil -}}
+      {{- $tags := slice -}}
+      {{- range $members -}}
+        {{- range .Params.tags -}}
+          {{- $key := lower . -}}
+          {{- if not (in $tags $key) }}{{ $tags = $tags | append $key }}{{ end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $tags = sort $tags -}}
+      {{- $bagTags = merge $bagTags (dict $slug $tags) -}}
+      {{- range $tags -}}
+        {{- $c := index $tagFreq . | default 0 -}}
+        {{- $tagFreq = merge $tagFreq (dict . (add $c 1)) -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{ partial "flavours_box.html" (dict
+         "tagFreq" $tagFreq
+         "cloudId" "bags-tag-cloud") }}
+
+    <ul class="bags-list" id="bags-results">
+      {{- range .Sections.ByTitle }}
+        {{- $slug := path.Base .Path -}}
+        {{- $tags := index $bagTags $slug -}}
+        {{- $field := printf "Params.bags.%s" $slug -}}
+        {{- $count := len (where $allArticles $field "ne" nil) -}}
+      <li class="bag-card"
+          data-tags="{{ delimit $tags "," }}"
+          data-title="{{ lower .Title }}"
+          data-description="{{ lower (.Description | default "") }}">
+        <a class="bag-card__body" href="{{ .RelPermalink }}">
+          <h2>{{ .Title }}</h2>
+          {{- with .Description }}<p>{{ . | markdownify }}</p>{{ end }}
+          <span class="bag-card__count">
+            {{ $count }} article{{ if ne $count 1 }}s{{ end }}
+          </span>
+        </a>
+        {{- with $tags }}
+        <ul class="bag-card__tags">
+          {{- range . }}
+          <li>{{ partial "tags/tag_link.html" . }}</li>
+          {{- end }}
+        </ul>
+        {{- end }}
+      </li>
+      {{- end }}
+    </ul>
+
+  {{- else }}
+
+    {{/* ===== Single bag ===== */}}
+    {{- $slug := path.Base .Path -}}
+    {{- $field := printf "Params.bags.%s" $slug -}}
+    {{- $articles := where (where site.RegularPages "Type" "article") $field "ne" nil -}}
+    {{- $articles = sort $articles $field "asc" -}}
+
+    {{ partial "breadcrumbs.html" . }}
+
+    <header class="bag-header">
+      <h1>{{ .Title }}</h1>
+      {{- with .Description }}
+      <p class="bag-description">{{ . | markdownify }}</p>
+      {{- end }}
+    </header>
+
+    {{- if .Content }}
+    <div class="bag-intro post-content">{{ .Content }}</div>
+    {{- end }}
+
+    <section class="bag-articles">
+      <h2 class="bag-articles__title">In this bag</h2>
+
+      {{- if $articles }}
+      <ol class="bag-article-list">
+        {{- range $articles }}
+        <li class="bag-article">
+          <a href="{{ .RelPermalink }}">
+            <h3>{{ .Title }}</h3>
+            {{- with .Description }}<p>{{ . | markdownify }}</p>{{ end }}
+            <footer class="bag-article__meta">
+              <span>{{ .Date.Format "02 Jan 2006" }}</span>
+              {{- with .ReadingTime }} · <span>{{ . }} min</span>{{ end }}
+            </footer>
+          </a>
+        </li>
+        {{- end }}
+      </ol>
+      {{- else }}
+      <p class="bag-articles__empty"><em>No articles in this bag yet.</em></p>
+      {{- end }}
+    </section>
+
+  {{- end }}
+
+</main>
+
+{{ end }}

@@ -1,0 +1,129 @@
+/*
+ * PaperMod variable roles (do not swap!):
+ *   --primary   = main body text color + pagination button bg
+ *   --secondary = meta/muted text (dates, reading time, footer)
+ *   --tertiary  = subtle backgrounds (blockquotes, tag chips, search border)
+ *   --content   = article body text inside .post-content
+ */
+
+ body {
+  font-family: "Avenir";
+}
+
+@mixin layout {
+    --gap: 24px;
+    --content-gap: 20px;
+    --nav-width: 95%;
+    --main-width: 85%;
+    --header-height: 100px;
+    --footer-height: 60px;
+    --radius: 8px;
+
+    --shadow-sm:  0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md:  0 8px 24px rgba(0,0,0,0.15);
+    --shadow-lg:  0 10px 28px rgba(0,0,0,0.06);
+    --shadow-lg-hover: 0 14px 36px rgba(0,0,0,0.1);
+}
+
+@mixin light-palette {
+    /* ── Light mode: clean canvas, salsa accent ──────────── */
+    --theme:      #F7F5F0;          /* global page bg — warm cream (uniform with cards' look) */
+    --entry:      #FFFFFF;          /* card / entry background — white to stand out on cream */
+    --background: #F7F5F0;
+    --primary:    #1A1204;          /* main text — very dark warm brown-black */
+    --secondary:  #6B5232;          /* meta text — warm brown, WCAG AA on white */
+    --tertiary:   #FFF0D8;          /* blockquote/chip bg — warm chip-cream */
+    --content:    #222222;          /* article body text */
+    --text:       #1A1204;
+    --accent:     #C42B0C;          /* salsa red — buttons, links, active tags */
+    --border:     #E8E2D8;
+    --tag-bg:     #EDE8DC;          /* default (uncolored) tag background */
+    --code-block-bg: #1A1204;
+    --code-bg:    #F5F0E8;
+    /* Code snippets (chroma.scss): nord-hued tokens on a white canvas.
+       Nord's pastel inks are designed for a dark bg (2:1 contrast on white),
+       so light mode uses HSL-darkened variants of each hue — every token
+       reaches >= 4.5:1 (WCAG AA) on white while keeping nord's character. */
+    --code-snippet-bg: #FFFFFF;
+    --code-ink:    #2E3440;         /* plain text (nord0) */
+    --code-punct:  #3B4252;         /* punctuation (nord1) */
+    --code-hl:     #E5E9F0;         /* highlighted line bg (nord5) */
+    --code-linenr: #848B98;         /* line numbers */
+    --chroma-keyword:   #4A79A9;    /* keywords, operators, tags, builtins */
+    --chroma-function:  #327F95;    /* function names, headings */
+    --chroma-type:      #47807F;    /* classes, constants, attributes */
+    --chroma-string:    #5E7F41;    /* string literals, diff-inserted */
+    --chroma-number:    #9D6293;    /* numeric literals */
+    --chroma-decorator: #C05533;    /* decorators, entities */
+    --chroma-error:     #C3505B;    /* errors, exceptions, diff-deleted */
+    --chroma-escape:    #9C6E10;    /* string escapes, regexes */
+    --chroma-comment:   #616E87;    /* comments, docstrings (legible on both) */
+    --chroma-preproc:   #4F79AB;    /* preprocessor directives */
+    --search-bg:  #E8E2D6;
+    --keyword-standard: #E5E5EA;
+    --color-linkedin: #0073b1;
+    --text-muted: #888880;
+    --button-text: #ffffff;
+    --logo-white:  #1A1204;           /* logo white areas → dark in light mode */
+    --reverse-bg:   #FFFFFF;        /* light box bg (abstract, source-path) */
+    --reverse-text: #1A1204;        /* text inside light boxes */
+    --reverse-accent: #C42B0C;      /* accent inside light boxes — stays salsa
+                                       red in BOTH modes: the box bg never
+                                       darkens, and the dark-mode gold accent
+                                       is illegible on cream (contrast ~1.6) */
+    color-scheme: light;
+}
+
+@mixin dark-palette {
+    /* ── Dark mode: neutral dark, golden accent ──────────── */
+    --theme:      #1F1F1F;          /* page bg — slightly lifted from pure black */
+    --entry:      #2A2A2A;          /* cards — keep contrast against --theme */
+    --background: #1F1F1F;
+    --primary:    #EEEAD8;          /* main text — warm off-white */
+    --secondary:  #A89070;          /* meta text — warm golden-brown, WCAG AA on #141414 */
+    --tertiary:   #201808;          /* blockquote/chip bg — very dark warm */
+    --content:    #D0C8B0;          /* article body text */
+    --text:       #EEEAD8;
+    --accent:     #F0B429;          /* melted cheese yellow */
+    --border:     #2C2C2C;
+    --tag-bg:     rgba(240, 180, 41, 0.12);
+    --code-block-bg: #0E0E0E;
+    --code-bg:    #201808;
+    /* Code snippets: nord's native dark canvas + original nord tokens. */
+    --code-snippet-bg: #2E3440;     /* nord0 */
+    --code-ink:    #D8DEE9;         /* plain text (nord4) */
+    --code-punct:  #ECEFF4;         /* punctuation (nord6) */
+    --code-hl:     #424853;         /* highlighted line bg */
+    --code-linenr: #6C6F74;         /* line numbers */
+    --chroma-keyword:   #81A1C1;
+    --chroma-function:  #88C0D0;
+    --chroma-type:      #8FBCBB;
+    --chroma-string:    #A3BE8C;
+    --chroma-number:    #B48EAD;
+    --chroma-decorator: #D08770;
+    --chroma-error:     #BF616A;
+    --chroma-escape:    #EBCB8B;
+    --chroma-comment:   #919CB0;    /* nord's #616E87 lightened to 4.5:1 on
+                                       the nord0 canvas (was 2.4:1) */
+    --chroma-preproc:   #5E81AC;
+    --search-bg:  #201808;
+    --keyword-standard: #3A3A42;
+    --color-linkedin: #0073b1;
+    --text-muted: #888880;
+    --button-text: #141414;         /* dark text on yellow buttons */
+    --logo-white:  #EEEAD8;
+    --reverse-bg:   #F0EDE3;        /* light box bg in dark mode (abstract, source-path) */
+    --reverse-text: #1A1204;        /* dark text inside light boxes */
+    --reverse-accent: #C42B0C;      /* see light palette — must stay dark-on-light */
+    color-scheme: dark;
+}
+
+:root                       { @include layout; @include light-palette; }
+:root[data-theme="dark"]    { @include dark-palette; }
+
+/* Auto mode: follow OS preference, including the noscript path
+   (when JS is off, data-theme stays "auto" and prefers-color-scheme decides). */
+:root[data-theme="auto"]    { @include light-palette; }
+@media (prefers-color-scheme: dark) {
+    :root[data-theme="auto"] { @include dark-palette; }
+}

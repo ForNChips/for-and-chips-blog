@@ -1,0 +1,124 @@
+baseURL: "https://forandchips.com/"
+locale: "en-uk"
+title: "For&Chips"
+theme: "PaperMod"
+
+enableRobotsTXT: true
+
+params:
+  # env is set per environment: config/production/hugo.yaml → "production",
+  # config/demo/hugo.yaml → "demo". Anything but "production" makes PaperMod
+  # emit <meta name="robots" content="noindex, nofollow">.
+  env: development
+  author: "Some of the crunchiest chips"
+  description: "Personal blog shared"
+  defaultTheme: "dark"
+  ShowReadingTime: true
+  ShowToc: true
+  ShowCodeCopyButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowShareButtons: true
+  hideFooter: false
+  disableScrollToTop: false
+  DateFormat: :date_long
+  label:
+    title: "For&Chips"
+    subtitle: "digital forensic"
+    icon: /logo_4nchips.svg
+  assets:
+    favicon: "/favicon.ico"
+    favicon16x16: "/favicons/favicon-16x16.png"
+    favicon32x32: "/favicons/favicon-32x32.png"
+    apple_touch_icon: "/favicons/apple-touch-icon.png"
+    safari_pinned_tab: "/favicons/safari-pinned-tab.svg"
+  cover:
+    responsiveImages: true
+
+  authors:
+    showCollabGraph: true
+
+  articles:
+    # When true, /articles/ shows a link to the /article-graph/ page.
+    showGraph: true
+
+  donation:
+    enabled: true
+    provider: "buymeacoffee"   # "buymeacoffee" or "ko-fi"
+    url: "https://buymeacoffee.com/forandchips"   # append your Buy Me a Coffee username
+    label: "Buy us a coffee"
+
+  contact:
+    # Where the /about/ form POSTs. "/api/contact" is the Cloudflare Pages
+    # Function in functions/api/contact.js (needs RESEND_API_KEY etc. on the
+    # Pages project — see doc/deployment.md). Set to "" to hide the form.
+    # Any external provider URL (e.g. Formspree) also works.
+    formEndpoint: "/api/contact"
+
+  analytics:
+    goatcounter:
+      # enabled is flipped per environment (config/production/hugo.yaml);
+      # the script is only emitted when both enabled and code are set.
+      enabled: false
+      code: "forandchips"   # your GoatCounter site code, e.g. "forandchips"
+
+  comments:
+    enabled: false
+    # giscus settings — fill in after enabling GitHub Discussions on the repo
+    giscus:
+      repo: ""
+      repoId: ""
+      category: ""
+      categoryId: ""
+
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: true
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 70
+    - name: date
+      weight: 10
+      pattern: "2006"
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+menu:
+  main:
+    - name: "Home"
+      url: "/"
+      weight: 1
+
+    - name: "Articles"
+      url: "/articles/"
+      weight: 2
+
+    - name: "Bags"
+      url: "/bags/"
+      weight: 3
+
+    - name: "Tools"
+      url: "/tools/"
+      weight: 4
+
+    - name: "Authors"
+      url: "/authors/"
+      weight: 5
+
+    - name: "About"
+      url: "/about/"
+      weight: 100
+
+markup:
+  highlight:
+    style: nord
+    # Emit chroma CSS classes instead of inline styles so code snippet
+    # colours can follow the light/dark theme (assets/css/extended/chroma.scss).
+    noClasses: false

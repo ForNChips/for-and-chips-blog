@@ -1,0 +1,7 @@
+{{- /* Returns an author's display name.
+       Argument: the author id (key in data/authors.yml).
+       Falls back to a name derived from the id slug when the author is
+       not registered (validate.py flags that case anyway). */ -}}
+{{- $name := replace . "-" " " | title -}}
+{{- with index hugo.Data.authors . -}}{{- $name = printf "%s %s" .first_name .last_name -}}{{- end -}}
+{{- return $name -}}

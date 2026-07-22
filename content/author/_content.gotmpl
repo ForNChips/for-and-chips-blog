@@ -1,0 +1,16 @@
+{{ range $key, $author := hugo.Data.authors }}
+
+  {{ $params := dict
+    "authorKey" $key
+  }}
+
+  {{ $page := dict
+    "kind"  "page"
+    "path"  $key
+    "title" $author.name
+    "params" $params
+  }}
+
+  {{ $.AddPage $page }}
+
+{{ end }}

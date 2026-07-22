@@ -1,0 +1,11 @@
+{{/*
+  Returns a processed WebP image resource, resizing only if wider than maxWidth.
+  Usage: partial "helpers/thumb.html" (dict "img" $img "maxWidth" 800)
+*/}}
+{{- $img    := .img -}}
+{{- $max    := .maxWidth | default 800 -}}
+{{- $result := $img.Process "webp q85" -}}
+{{- if gt $img.Width $max -}}
+  {{- $result = $img.Resize (printf "%dx webp q85" $max) -}}
+{{- end -}}
+{{- return $result -}}

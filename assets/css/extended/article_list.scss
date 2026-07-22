@@ -1,0 +1,168 @@
+/* ============================================================
+   Article list page
+   ============================================================ */
+
+/* ── Card row layout ─────────────────────────────────────── */
+.article-card-layout {
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+/* ── Flavours box ─────────────────────────────────────── */
+.flavours-box {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 2rem 0;
+  background: var(--entry);
+}
+
+.flavours-title {
+  text-align: center;
+  margin-bottom: 1.2rem;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+
+  svg {
+    width: 1.2em;
+    height: 1.2em;
+  }
+}
+
+/* ── Text column ─────────────────────────────────────────── */
+.article-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  .entry-content {
+    flex-grow: 1;
+  }
+}
+
+.entry-link {
+  min-height: 0;
+}
+
+.post-entry {
+  min-height: 0;
+}
+
+/* ── Tags ────────────────────────────────────────────────── */
+.post-tags {
+  margin-top: 1.2rem;
+  margin-bottom: 0;
+}
+
+.tag {
+  background: var(--tag-bg);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+/* ── Tag cloud (compact pills for list / author pages) ────── */
+.articles-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  .tag-pill {
+    font-size: 0.78rem;
+    padding: 0.2rem 0.6rem;
+    gap: 0.35rem;
+  }
+}
+
+/* ── Typographic hierarchy ───────────────────────────────── */
+.post-entry .entry-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  margin: 0 0 0.4rem;
+}
+
+.post-entry .entry-content p {
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--secondary);
+  margin: 0 0 0.4rem;
+}
+
+.post-entry .entry-footer > span:first-child {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--secondary);
+  opacity: 0.7;
+}
+
+/* ── Light mode card definition ─────────────────────────── */
+[data-theme="light"] .post-entry {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Thumbnail (list layout only) ────────────────────────── */
+.post-entry .article-thumb {
+  flex: 0 0 160px;
+  width: 160px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: 12px;
+  }
+
+  &--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+      radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background-size: 20px 20px, 100% 100%;
+  }
+}
+
+.post-entry .article-thumb .placeholder-tag {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .article-card-layout {
+    flex-direction: column;
+  }
+
+  .post-entry .article-thumb {
+    width: 100%;
+    flex: none;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+  }
+}

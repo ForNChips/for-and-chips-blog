@@ -1,0 +1,37 @@
+/* ============================================================
+   Tools — index page (/tools) + single tool page
+   The card grid itself reuses .articles-grid / .article-card
+   from cards.scss; only the tools-specific bits live here.
+   Used by layouts/tools/list.html and layouts/tool/single.html;
+   imported from main.scss.
+   ============================================================ */
+
+.tools-page {
+
+  /* ── Intro paragraph under the H1 (index page) ────────── */
+  .tools-intro {
+    max-width: 640px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    color: var(--secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+
+    p { margin: 0; }
+  }
+}
+
+/* ── Repo / website links in the single-tool header ─────── */
+.tool-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+
+  a {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    text-decoration: underline;
+
+    &:hover { color: var(--primary); }
+  }
+}

@@ -1,0 +1,67 @@
+{{ define "main" }}
+
+<main class="about-page">
+
+  <h1>{{ .Title }}</h1>
+
+  <div class="about-content">
+    {{ .Content }}
+  </div>
+
+  {{- partial "donation.html" . }}
+
+  {{- /* Contact form only renders once params.contact.formEndpoint is set
+         (config/_default/hugo.yaml) — avoids a live form posting nowhere. */}}
+  {{- with site.Params.contact.formEndpoint }}
+  <section class="about-contact">
+    {{- /* Status banner filled from the ?sent= flag set by /api/contact. */}}
+    <div id="contact-status" class="contact-status" hidden></div>
+    <script>
+      (function () {
+        var p = new URLSearchParams(window.location.search);
+        if (!p.has('sent')) return;
+        var el = document.getElementById('contact-status');
+        var ok = p.get('sent') === '1';
+        var reasons = {
+          missing: 'Please fill in every field and try again.',
+          invalid: 'That email address does not look valid — please check it.',
+          unconfigured: 'The contact form is not active on this deployment.',
+          send: 'Something went wrong while sending — please try again later.'
+        };
+        el.textContent = ok
+          ? 'Thanks! Your message has been sent.'
+          : (reasons[p.get('reason')] || reasons.send);
+        el.classList.add(ok ? 'contact-status--ok' : 'contact-status--err');
+        el.hidden = false;
+      })();
+    </script>
+    <form
+      action="{{ . }}"
+      method="POST"
+      class="contact-form"
+    >
+      {{- /* Honeypot — Formspree silently drops submissions that fill it. */}}
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+      <div class="form-group">
+        <label for="contact-name">Name</label>
+        <input type="text" id="contact-name" name="name" placeholder="Your name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contact-email">Email</label>
+        <input type="email" id="contact-email" name="email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="6" placeholder="Your message…" required></textarea>
+      </div>
+
+      <button type="submit" class="contact-submit">Send message</button>
+    </form>
+  </section>
+  {{- end }}
+
+</main>
+
+{{ end }}

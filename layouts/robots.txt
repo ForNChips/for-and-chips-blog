@@ -1,0 +1,10 @@
+{{- if eq hugo.Environment "production" -}}
+User-agent: *
+Allow: /
+
+Sitemap: {{ .Site.BaseURL }}sitemap.xml
+{{- else -}}
+# Non-production environment ({{ hugo.Environment }}) — keep crawlers out.
+User-agent: *
+Disallow: /
+{{- end -}}

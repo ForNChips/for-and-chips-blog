@@ -1,0 +1,21 @@
+{{/* Renders a "Part of <bag>" badge for each bag this article belongs to.
+     Reads .Params.bags as a map { <bag-slug>: <order>, ... }.
+     The order value is used by the bag page to sort articles; here we just
+     iterate over the keys and resolve each slug via /bags/<slug>. */}}
+
+{{- with .Params.bags }}
+<div class="article-bags">
+  {{- range $slug, $order := . }}
+    {{- $page := site.GetPage (printf "/bags/%s" $slug) }}
+    {{- if $page }}
+    <a class="article-bag-pill" href="{{ $page.RelPermalink }}" title="See the full bag">
+      <svg class="article-bag-pill__icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 7h12l-1 13H7L6 7z"/>
+        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+      </svg>
+      <span class="article-bag-pill__label">Part of <strong>{{ $page.Title }}</strong></span>
+    </a>
+    {{- end }}
+  {{- end }}
+</div>
+{{- end }}

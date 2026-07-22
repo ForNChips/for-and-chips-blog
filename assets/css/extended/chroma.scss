@@ -1,0 +1,77 @@
+/* ============================================================
+   Chroma syntax highlighting — fully theme-aware.
+
+   Structure comes from `hugo gen chromastyles --style=nord`;
+   every colour is routed through the CSS variables defined in
+   vars.scss:
+     --code-snippet-bg / --code-ink / --code-punct / --code-hl /
+     --code-linenr    — canvas + neutral inks
+     --chroma-*       — one var per token family (dark mode uses
+                        nord's original pastels; light mode uses
+                        HSL-darkened variants that reach WCAG AA
+                        on the white canvas)
+
+   Requires markup.highlight.noClasses: false in hugo.yaml.
+   Loaded after PaperMod's bundled chroma-styles.css (catppuccin),
+   which it overrides class-for-class; used by every highlighted
+   code block ({{< code >}} shortcode and plain fences).
+   ============================================================ */
+
+/* ── Canvas + neutral inks ─────────────────────────────────── */
+/* Background */ .bg { color: var(--code-ink); background-color: var(--code-snippet-bg); }
+/* PreWrapper */ .chroma { color: var(--code-ink); background-color: var(--code-snippet-bg); -webkit-text-size-adjust: none; }
+/* The sitewide inline-code rule (article.scss: `code { color: var(--accent) }`)
+   would otherwise recolour un-tokenised text inside highlighted blocks. */
+.chroma code { color: inherit; }
+/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
+/* LineHighlight */ .chroma .hl { background-color: var(--code-hl) }
+/* LineNumbersTable */ .chroma .lnt { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; color: var(--code-linenr) }
+/* LineNumbers */ .chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; color: var(--code-linenr) }
+/* Line */ .chroma .line { display: flex; }
+
+/* ── Keywords / operators / tags / builtins ────────────────── */
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kn, .chroma .kr { color: var(--chroma-keyword); font-weight: bold }
+.chroma .kp, .chroma .kt, .chroma .nt, .chroma .nb, .chroma .bp, .chroma .o { color: var(--chroma-keyword) }
+.chroma .ow { color: var(--chroma-keyword); font-weight: bold }
+
+/* ── Functions / headings ──────────────────────────────────── */
+.chroma .nf, .chroma .fm { color: var(--chroma-function) }
+.chroma .gh, .chroma .gu { color: var(--chroma-function); font-weight: bold }
+
+/* ── Classes / constants / attributes / namespaces ─────────── */
+.chroma .na, .chroma .nc, .chroma .no, .chroma .nl, .chroma .nn, .chroma .py { color: var(--chroma-type) }
+
+/* ── Strings / diff-inserted ───────────────────────────────── */
+.chroma .s, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .dl, .chroma .s2,
+.chroma .sh, .chroma .si, .chroma .sx, .chroma .s1, .chroma .ss, .chroma .gi { color: var(--chroma-string) }
+
+/* ── Numbers ───────────────────────────────────────────────── */
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh, .chroma .mi, .chroma .il, .chroma .mo { color: var(--chroma-number) }
+
+/* ── Decorators / entities ─────────────────────────────────── */
+.chroma .nd, .chroma .ni { color: var(--chroma-decorator) }
+
+/* ── Errors / exceptions / diff-deleted ────────────────────── */
+.chroma .err, .chroma .ne, .chroma .gd, .chroma .gr, .chroma .gt { color: var(--chroma-error) }
+
+/* ── String escapes / regexes ──────────────────────────────── */
+.chroma .se, .chroma .sr { color: var(--chroma-escape) }
+
+/* ── Comments / docstrings ─────────────────────────────────── */
+.chroma .c, .chroma .ch, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .sd { color: var(--chroma-comment); font-style: italic }
+.chroma .cp, .chroma .cpf { color: var(--chroma-preproc); font-style: italic }
+
+/* ── Plain names / output / whitespace ─────────────────────── */
+/* NameVariable*: nord leaves these at the base ink, but PaperMod's bundled
+   chroma-styles.css paints them near-white; reset so light mode stays legible. */
+.chroma .nv, .chroma .vc, .chroma .vg, .chroma .vi, .chroma .vm { color: var(--code-ink) }
+.chroma .n, .chroma .nx, .chroma .go, .chroma .w { color: var(--code-ink) }
+.chroma .p { color: var(--code-punct) }
+.chroma .gp { color: var(--code-linenr); font-weight: bold }
+
+/* ── Generic emphasis ──────────────────────────────────────── */
+.chroma .ge { font-style: italic }
+.chroma .gs { font-weight: bold }
+.chroma .gl { text-decoration: underline }

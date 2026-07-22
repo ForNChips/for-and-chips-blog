@@ -1,0 +1,12 @@
+# Production overlay — used by plain `hugo` builds (default environment).
+# Live site: https://forandchips.com/
+baseURL: "https://forandchips.com/"
+
+params:
+  env: production   # PaperMod: emits <meta name="robots" content="index, follow">
+
+  analytics:
+    goatcounter:
+      # Pre-enabled: the script only appears once `code` is set in
+      # config/_default/hugo.yaml (or overridden here).
+      enabled: true

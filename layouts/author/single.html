@@ -1,0 +1,123 @@
+{{ define "main" }}
+
+{{/* Compute author posts up front for reuse in stats */}}
+{{- $authorID := .Params.authorKey -}}
+{{- $allPosts := where site.RegularPages "Type" "article" -}}
+{{- $authorPosts := slice -}}
+{{- range $allPosts -}}
+  {{- $found := false -}}
+  {{- with .Params.authors -}}
+    {{- range . -}}
+      {{- if eq .id $authorID -}}{{- $found = true -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $found -}}{{- $authorPosts = $authorPosts | append . -}}{{- end -}}
+{{- end -}}
+
+{{/* Tag frequency map */}}
+{{- $tagCounts := dict -}}
+{{- range $authorPosts -}}
+  {{- range .Params.tags -}}
+    {{- $c := index $tagCounts . | default 0 -}}
+    {{- $tagCounts = merge $tagCounts (dict . (add $c 1)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $tagSlice := slice -}}
+{{- range $tag, $count := $tagCounts -}}
+  {{- $tagSlice = $tagSlice | append (dict "tag" $tag "count" $count) -}}
+{{- end -}}
+{{- $topTags := sort $tagSlice "count" "desc" | first 5 -}}
+
+<article class="author-page">
+  <div class="author-header">
+    {{ with .Params.authorKey }}
+      {{ $author := index hugo.Data.authors . }}
+      {{ $photo := "default.png" }}
+      {{ if and (isset $author "photo") (ne $author.photo "") }}
+        {{ $photo = $author.photo }}
+      {{ end }}
+      {{- /* Guard: a typo'd photo filename must not crash the build. */}}
+      {{- $imageRaw := resources.Get (printf "images/authors/%s" $photo) | default (resources.Get "images/authors/default.png") -}}
+      {{- $image := partial "helpers/thumb.html" (dict "img" $imageRaw "maxWidth" 300) -}}
+      <img src="{{ $image.RelPermalink }}"
+           alt="{{ $author.first_name }} {{ $author.last_name }}"
+           width="{{ $image.Width }}" height="{{ $image.Height }}"
+           class="author-photo" loading="eager" decoding="async">
+
+      <div class="author-info">
+        <div class="author-name-row">
+          <h1>{{ $author.first_name }} {{ upper $author.last_name }}</h1>
+          {{- with $author.role }}
+          <span class="role-badge role-badge--{{ lower . }}">{{ . }}</span>
+          {{- end }}
+        </div>
+
+        {{ with $author.current_affiliations }}
+          <ul class="affiliations">
+            {{ range $aff, $role := . }}
+              <li>{{ $role }} at {{ $aff }}</li>
+            {{ end }}
+          </ul>
+        {{ end }}
+
+        {{ partial "tags/keyword_badges.html" $author.keywords }}
+
+        {{- $links := $author.links -}}
+        {{- if $links -}}
+        <div class="links">
+          {{- $order := slice "orcid" "researchgate" "linkedin" "github" "x" "website" -}}
+          {{- range $order -}}
+            {{- $key := . -}}
+            {{- $value := index $links $key -}}
+            {{- if $value -}}
+          <a href="{{ $value }}" target="_blank" rel="noopener noreferrer" class="author-link author-link--{{ $key }}" title="{{ $key | title }}">
+            {{- partial "helpers/social_icon.html" $key -}}
+          </a>
+            {{- end -}}
+          {{- end -}}
+        </div>
+        {{- end -}}
+
+        {{ with $author.description }}
+          <p class="abstract">{{ . }}</p>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+
+  {{/* Stats bar */}}
+  <div class="author-stats">
+    <div class="author-stat">
+      <span class="author-stat__value">{{ len $authorPosts }}</span>
+      <span class="author-stat__label">Articles</span>
+    </div>
+    {{- if $topTags }}
+    <div class="author-stat author-stat--tags">
+      <span class="author-stat__label">Top flavours</span>
+      <div class="author-top-tags">
+        {{- range $topTags }}
+        <a href="/articles/?tag={{ lower .tag }}" class="author-tag-chip" data-tag="{{ lower .tag }}">
+          {{ partial "tags/tag_label.html" .tag }}<span class="author-tag-count">{{ .count }}</span>
+        </a>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
+  </div>
+
+  {{/* Article list — top-tag chips above drive the filter directly. */}}
+  <section class="home-latest">
+    <header class="section-header">
+      <h2>Latest articles</h2>
+    </header>
+    {{- partial "articles/cards.html" (dict
+      "posts"        $authorPosts
+      "paginate"     true
+      "filter"       true
+      "id"           "author"
+      "pillSelector" ".author-tag-chip"
+      "activeClass"  "author-tag-chip--active") -}}
+  </section>
+
+</article>
+{{ end }}

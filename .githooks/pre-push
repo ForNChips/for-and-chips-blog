@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Two safety nets before pushing:
+#   1. Refuse to push a private-only branch to the public remote.
+#   2. Full Hugo build (drafts excluded).
+# Per-article validation already happened at commit time.
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+# ── 1. Private-branch guard ─────────────────────────────────────────────
+# `drafts` holds unpublished / embargoed work. A public GitHub repo exposes
+# EVERY branch, so drafts must only ever reach the private remote. These two
+# patterns are the whole policy — edit them if the repos are renamed.
+PRIVATE_ONLY_BRANCHES='^(drafts)$'
+PUBLIC_REMOTE_PATTERN='ForNChips/for-and-chips-blog'
+
+remote_url="${2:-}"
+
+if [[ "$remote_url" =~ $PUBLIC_REMOTE_PATTERN ]]; then
+  # stdin: <local ref> <local sha> <remote ref> <remote sha>
+  while read -r _local_ref _local_sha remote_ref _remote_sha; do
+    [ -z "${remote_ref:-}" ] && continue
+    branch="${remote_ref#refs/heads/}"
+    if [[ "$branch" =~ $PRIVATE_ONLY_BRANCHES ]]; then
+      echo "" >&2
+      echo "pre-push: BLOCKED — refusing to push '$branch' to the PUBLIC remote." >&2
+      echo "          remote: $remote_url" >&2
+      echo "" >&2
+      echo "  '$branch' contains unpublished work. Every branch of a public repo" >&2
+      echo "  is publicly visible. Push it to the private remote instead:" >&2
+      echo "      git push archive $branch" >&2
+      echo "" >&2
+      exit 1
+    fi
+  done
+fi
+
+# ── 2. Build check ──────────────────────────────────────────────────────
+if command -v hugo >/dev/null 2>&1; then
+  echo "pre-push: running 'hugo --gc --minify -D=false'"
+  if ! hugo --gc --minify -D=false --quiet; then
+    echo "pre-push: Hugo build failed" >&2
+    exit 1
+  fi
+else
+  echo "pre-push: hugo not found in PATH — skipping build check" >&2
+fi

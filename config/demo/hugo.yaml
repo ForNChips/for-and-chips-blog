@@ -1,0 +1,9 @@
+# Demo overlay — build with `hugo --environment demo`.
+# Demo site: https://demo.forandchips.com/ — dummy content, no SEO, no analytics.
+baseURL: "https://demo.forandchips.com/"
+
+params:
+  env: demo   # anything but "production" → PaperMod emits noindex, nofollow
+
+# Analytics stay disabled (inherited from config/_default/hugo.yaml).
+# layouts/robots.txt emits "Disallow: /" for every non-production environment.

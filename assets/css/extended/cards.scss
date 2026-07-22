@@ -1,0 +1,145 @@
+/* ============================================================
+   Article card grid
+   Used on: homepage, author pages, see-also sections
+   ============================================================ */
+
+/* ── Section header (title + "see all" link) ─────────────── */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--accent);
+  }
+
+  .section-link {
+    font-size: 0.9rem;
+    color: var(--text);
+    text-decoration: none;
+
+    &:hover { color: var(--primary); }
+  }
+}
+
+/* ── Card grid ───────────────────────────────────────────── */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.8rem;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.article-card {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: var(--entry);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg-hover);
+  }
+
+  /* Stretched link covers the whole card via ::after overlay */
+  .article-card-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: 14px;
+    }
+  }
+
+  .article-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background-size: 20px 20px, 100% 100%;
+    }
+  }
+
+  .placeholder-tag {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    padding: 0.3rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .post-title {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 1rem;
+    margin-bottom: 0;
+    color: var(--text);
+  }
+
+  .article-card-footer {
+    margin-top: 0.9rem;
+  }
+
+  .article-meta-line {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--secondary);
+    margin-bottom: 0.6rem;
+    opacity: 0.75;
+  }
+
+  /* Tags sit above the stretched link */
+  .post-tags {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+}
+
+/* Light mode: add a border so cards lift off the white background */
+[data-theme="light"] .article-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm), 0 4px 12px rgba(0, 0, 0, 0.06);
+}

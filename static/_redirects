@@ -1,0 +1,5 @@
+# Server-side redirects (Netlify format, honoured by Cloudflare Pages).
+# The /tags pages are retired: layouts/tags/list.html still renders a
+# JS + meta-refresh fallback for hosts that ignore this file.
+/tags/:tag /articles/?tag=:tag 301
+/tags/ /articles/ 301

@@ -1,0 +1,48 @@
+{{/* Reusable "Pick your flavour" box (title + tag cloud).
+
+     Context (dict) — pass EITHER:
+       pages   — slice of pages; the partial will aggregate frequencies from
+                 each page's .Params.tags (one tag = one count per page).
+       tagFreq — pre-computed dict { "<tag>": <count>, ... }; use this when
+                 the counting logic is non-trivial (e.g. bags, where each
+                 bag aggregates tags from its member articles).
+     Also:
+       cloudId — DOM id for the cloud container (default "articles-tag-cloud").
+                 Filter scripts on the page listen to this id.
+*/}}
+
+{{- $cloudId := .cloudId | default "articles-tag-cloud" -}}
+
+{{/* Resolve frequency dict. Tags are lowercased so "Logs" and "logs"
+     collapse to the same pill. */}}
+{{- $freq := .tagFreq -}}
+{{- if not $freq -}}
+  {{- $freq = dict -}}
+  {{- range .pages -}}
+    {{- range .Params.tags -}}
+      {{- $key := lower . -}}
+      {{- $c := index $freq $key | default 0 -}}
+      {{- $freq = merge $freq (dict $key (add $c 1)) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Sort tag keys alphabetically for stable pill order. */}}
+{{- $keys := slice -}}
+{{- range $k, $_ := $freq -}}{{- $keys = $keys | append $k -}}{{- end -}}
+{{- $keys = sort $keys -}}
+
+<div class="flavours-box">
+  <h3 class="flavours-title">
+    {{- with resources.Get "images/icons/flavours.svg" }}{{ .Content | safeHTML }}{{ end }}
+    Pick your flavour
+  </h3>
+
+  <div class="articles-tag-cloud" id="{{ $cloudId }}">
+    {{- range $keys }}
+      <button class="tag-pill" data-tag="{{ . }}">
+        <span class="tag-pill__label">{{ partial "tags/tag_label.html" . }}</span><span class="tag-pill__count">{{ index $freq . }}</span>
+      </button>
+    {{- end }}
+  </div>
+</div>

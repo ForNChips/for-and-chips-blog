@@ -1,0 +1,111 @@
+{{- define "main" }}
+
+<div id="reading-progress" aria-hidden="true"></div>
+
+{{- /* data-pagefind-body scopes the Pagefind index to article pages only. */}}
+<article class="post-single" data-pagefind-body>
+
+  {{/* ═══════════════════════════════════════════════════════════
+       PDF / screen — article header (visible everywhere)
+       ═══════════════════════════════════════════════════════════ */}}
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    <ul class="post-tags">
+      {{- range ($.GetTerms $tags) }}
+      <li>{{ partial "tags/tag_link.html" .LinkTitle }}</li>
+      {{- end }}
+    </ul>
+
+    {{- partial "articles/bags_badge.html" . }}
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- partial "post_nav_links.html" . }}
+    {{- end }}
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
+
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+          <path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
+      {{- end }}
+    </h1>
+
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta">
+      {{- partial "articles/article_meta.html" . -}}
+      {{- with .Params.lastmod }}
+      <span class="article-lastmod">· Updated {{ . | time.Format ":date_long" }}</span>
+      {{- end }}
+      {{- partial "translation_list.html" . -}}
+      {{- partial "edit_post.html" . -}}
+      {{- partial "post_canonical.html" . -}}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- if (.Param "ShowToc") }}
+    {{- partial "toc.html" . }}
+  {{- end }}
+
+  {{- partial "articles/abstract.html" . }}
+  {{- partial "articles/source_path.html" . }}
+
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+
+  {{/* ═══════════════════════════════════════════════════════════
+       PDF / screen — article body (visible everywhere)
+       ═══════════════════════════════════════════════════════════ */}}
+  {{- if .Content }}
+  <div class="post-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{/* ═══════════════════════════════════════════════════════════
+       Screen only — hidden in print via print.scss
+       (PDF button, related articles, citation, donation, comments)
+       ═══════════════════════════════════════════════════════════ */}}
+  <footer class="post-footer screen-only">
+    <button class="pdf-export-btn" onclick="window.print()" aria-label="Export as PDF">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Export PDF
+    </button>
+  </footer>
+
+  {{- $seealso := slice -}}
+  {{- if .Params.see_also -}}
+    {{- range .Params.see_also -}}
+      {{- $p := site.GetPage . -}}
+      {{- if $p -}}{{- $seealso = $seealso | append $p -}}{{- end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $seealso = site.RegularPages.Related . | first 3 -}}
+  {{- end -}}
+  {{- with $seealso -}}
+  <section class="related-articles screen-only">
+    <header class="section-header"><h2>See also</h2></header>
+    {{- partial "articles/cards.html" (dict "posts" . "limit" 3 "id" "seealso") -}}
+  </section>
+  {{- end -}}
+
+  <div class="screen-only">
+    {{- partial "articles/citation.html" . }}
+    {{- partial "donation.html" . }}
+    {{- if (site.Params.comments.enabled) }}
+    {{- partial "comments.html" . }}
+    {{- end }}
+  </div>
+
+</article>
+
+{{- end }}{{/* end main */}}

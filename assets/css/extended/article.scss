@@ -1,0 +1,445 @@
+/* ── Post title accent color ─────────────────────────── */
+h1.post-title {
+  color: var(--primary);
+  padding-top: 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;  
+  font-weight: 780;
+  margin-bottom: 1rem;
+  font-family: "Avenir";
+}
+
+  code {
+    color: var(--accent);  
+    padding: 0.1em 0.15em;
+    border-radius: 2px;
+    font-size: 0.9em;
+  }
+
+/* ── Last modified date ──────────────────────────────── */
+.article-lastmod {
+  font-size: 0.82rem;
+  color: var(--content);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+/* ── See also / Related posts ────────────────────────── */
+.related-posts {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Inline post cross-reference ─────────────────────── */
+.article-xref {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px dashed var(--accent);
+
+  &:hover { border-bottom-style: solid; }
+}
+
+.article-xref-missing {
+  color: var(--secondary);
+  font-style: italic;
+  cursor: help;
+}
+
+/* ── PDF export button ───────────────────────────────── */
+.pdf-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.9rem;
+  margin-bottom: 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--secondary);
+  background: transparent;
+  color: var(--secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--button-text);
+  }
+
+  @media print { display: none !important; }
+}
+
+/* ── Reading progress bar ────────────────────────────── */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ── Article sections (Abstract, Path) ──────────────── */
+.article-section {
+  position: relative;
+  background-color: var(--reverse-bg);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 2rem 0 2.5rem 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--reverse-text);
+  font-family: "Avenir";
+
+  code {
+    color: var(--reverse-accent);
+  }
+}
+
+.article-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.75rem 0;
+}
+
+.article-section-content {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Abstract section (grey border) */
+.article-description {
+  border-left: 8px solid #8c8c8c;
+
+  .article-section-title {
+    color: var(--reverse-text);
+  }
+}
+
+/* Path section (red/accent border) */
+.article-paths {
+  border-left: 8px solid var(--reverse-accent);
+
+  .article-section-title {
+    color: var(--reverse-accent);
+  }
+}
+
+.post-description {
+  position: relative;
+  background-color: var(--reverse-bg);
+  border-left: 8px solid #8c8c8c;
+  border-radius: 10px 10px 10px 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--reverse-text);
+  font-family: "Avenir";
+
+
+  &::before {
+    content: "Abstract";
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--reverse-text);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Inline code inherits `code { color: var(--accent) }`, but this box keeps
+     a light bg in dark mode where the gold accent is illegible — use the
+     always-dark reverse accent instead. */
+  code {
+    color: var(--reverse-accent);
+  }
+}
+
+
+.post-meta {
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--content);
+  margin-bottom: 1.5rem;
+  font-family: "Avenir";
+
+  .post-authors {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .author-affiliations {
+    font-size: 0.78rem;
+    opacity: 0.8;
+    div { display: inline; }
+    div + div::before { content: "\00a0\00a0\00a0"; }
+    padding-bottom: 0.5rem;
+  }
+
+  .post-meta-dates {
+    font-size: 0.82rem;
+  }
+
+  .article-lastmod {
+    font-style: italic;
+  }
+}
+
+.toc {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.inner {
+font-weight: 500;
+letter-spacing: 0.01em;
+font-size: 1rem;
+text-transform: none;
+font-family: "Avenir";
+}
+
+.toc {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  background-color: var(--theme);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 1rem 1.5rem;
+}
+
+.inner {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-size: 1rem;
+  text-transform: none;
+  font-family: "Avenir";
+}
+
+
+
+.source-paths {
+  background-color: var(--reverse-bg);
+  color: var(--reverse-text);
+  padding: 0.8rem 1rem;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 0.85rem;
+  /* Reverse accent, not --accent: this box stays light in dark mode,
+     where the gold accent would wash out (see vars.scss). */
+  border-left: 8px solid var(--reverse-accent);
+  border-radius: 10px;
+
+  &::before {
+    content: "Path";
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--reverse-accent);
+    margin-bottom: 0.4rem;
+  }
+}
+
+.source-path {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+
+  & + .source-path {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid color-mix(in srgb, var(--reverse-accent) 30%, transparent);
+  }
+
+  .source-path-label {
+    font-size: 1rem;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  .source-path-value {
+    color: var(--reverse-text);
+    word-break: break-all;
+    font-size: 0.8rem;
+  }
+
+  .source-path-datastructure {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   Article body styling (.post-content)
+   ═══════════════════════════════════════════════════════════ */
+.post-content {
+  h1 { margin: 3rem 0 1.5rem; }
+  h2 { margin: 2.5rem 0 1.25rem; }
+  h3 { margin: 2rem 0 1rem; }
+  h4 { margin: 1.75rem 0 0.75rem; }
+
+  p {text-align: justify;}
+
+  /* ── Bulleted lists: indented relative to the text ───── */
+  ul, ol {
+    padding-left: 2.5rem;
+    margin: 1rem 0;
+
+    li { margin: 0.35rem 0; }
+  }
+
+  /* ── Images: centred, 80% width, framed ─────────────── */
+  img {
+    display: block;
+    margin: 2rem auto;
+    width: clamp(320px, 80%, 850px);
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+  }
+
+  /* ── Figures: image + caption centred below ──────────── */
+  figure {
+    margin: 2rem auto;
+    text-align: center;
+
+    img {
+      margin: 0 auto 0.5rem;
+    }
+
+    figcaption {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-style: italic;
+      text-align: center;
+      margin-top: 0.5rem;
+      max-width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+    }
+  }
+
+  /* ── Tables: centred, with separator lines ───────────── */
+  table {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+    width: fit-content;
+    max-width: 100%;
+
+    th, td {
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      border-bottom: 2px solid var(--secondary);
+      font-weight: 600;
+    }
+
+    /* Table caption: centred, below the table */
+    caption {
+      caption-side: bottom;
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-style: italic;
+      text-align: center;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+.code-block {
+  margin: 1.5rem auto 2rem auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  max-width: 720px;
+
+  .code-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1rem;
+    background-color: var(--code-bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-block-lang {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .highlight {
+    position: relative;
+
+    div { margin: 0 ; }
+
+    pre {
+      margin: 0 ;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      /* Canvas follows the theme (white in light, nord0 in dark) — the
+         !important defeats PaperMod's own pre/code background rules. */
+      background-color: var(--code-snippet-bg) !important;
+      border-radius: 0 0 10px 10px;
+      overflow-x: auto;
+      font-family: "Avenir";
+    }
+
+    pre > code {
+      padding: 0 ;
+      margin: 0 ;
+      background: transparent ;
+      display: block;
+    }
+
+    button.copy-code {
+      display: none !important;
+    }
+  }
+
+  .code-copy-btn {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--content);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+
+    &:hover { opacity: 1; }
+  }
+}

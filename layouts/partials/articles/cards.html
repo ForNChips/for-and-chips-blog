@@ -1,0 +1,122 @@
+{{/*
+  Parametric small-card grid partial.
+  Parameters (pass via dict):
+    posts    — slice of pages to render (required)
+    limit    — max cards when not paginating; 0 = show all (default 0)
+    paginate — bool: enable client-side pagination (default false)
+    filter   — bool: show tag-cloud filter above grid (default false)
+    id       — string: unique DOM prefix, e.g. "home", "author", "seealso" (default "cards")
+*/}}
+{{- $posts        := .posts -}}
+{{- $limit        := .limit        | default 0 -}}
+{{- $paginate     := .paginate     | default false -}}
+{{- $filter       := .filter       | default false -}}
+{{- $hideCloud    := .hideCloud    | default false -}}
+{{- $id           := .id           | default "cards" -}}
+{{- /* When pillSelector is set, skip the internal cloud and let an external
+       UI (e.g. author stats chips) drive the filter directly. */ -}}
+{{- $pillSelector := .pillSelector | default "" -}}
+{{- $activeClass  := .activeClass  | default "tag-pill--active" -}}
+
+{{/* When not paginating apply limit in Hugo */}}
+{{- $display := $posts -}}
+{{- if and (gt $limit 0) (not $paginate) -}}
+  {{- $display = first $limit $posts -}}
+{{- end -}}
+
+{{/* ── Tag cloud (only when filtering AND no external pill selector) ── */}}
+{{- if and $filter (not $pillSelector) -}}
+  {{- $allTags := slice -}}
+  {{- range $posts -}}
+    {{- range .Params.tags -}}
+      {{- $allTags = $allTags | append (lower .) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $allTags = $allTags | uniq -}}
+<div class="articles-tag-cloud{{ if $hideCloud }} articles-tag-cloud--hidden{{ end }}" id="{{ $id }}-tag-cloud"{{ if $hideCloud }} aria-hidden="true"{{ end }}>
+  {{- range $allTags -}}
+  <button class="tag-pill" data-tag="{{ . }}"><span class="tag-pill__label">{{ partial "tags/tag_label.html" . }}</span></button>
+  {{- end -}}
+</div>
+{{- end -}}
+
+{{/* ── Pagination top anchor ── */}}
+{{- if $paginate -}}
+<div id="{{ $id }}-pagination-top"></div>
+{{- end -}}
+
+{{/* ── Card grid ── */}}
+<div class="articles-grid" id="{{ $id }}-grid">
+  {{- range $display -}}
+    {{- $tagList := slice -}}
+    {{- range .Params.tags -}}{{- $tagList = $tagList | append (lower .) -}}{{- end -}}
+  <article class="article-card"{{ if or $paginate $filter }} data-tags="{{ delimit $tagList "," }}" style="display:none"{{ end }}>
+    <a href="{{ .RelPermalink }}" class="article-card-link">
+      {{- partial "articles/article_thumb.html" (dict "page" . "maxWidth" 800) -}}
+      <h3 class="post-title">{{ .Title }}</h3>
+    </a>
+    <div class="article-card-footer">
+      <div class="article-meta-line">
+        <span>{{ .Date.Format "02 Jan 2006" }}</span>
+        <span aria-hidden="true">·</span>
+        <span>{{ .ReadingTime }} min read</span>
+      </div>
+      {{ with .Params.tags -}}
+      <div class="post-tags">
+        {{ range . -}}
+        {{ partial "tags/tag_link.html" . }}
+        {{ end -}}
+      </div>
+      {{- end }}
+    </div>
+  </article>
+  {{- end }}
+</div>
+
+{{/* ── Pagination bottom anchor ── */}}
+{{- if $paginate -}}
+<div id="{{ $id }}-pagination-bottom"></div>
+{{- end -}}
+
+{{/* ── Client-side JS (only when paginate or filter) ──
+     Page-level surfaces (/articles, /bags, /authors) wire Paginator/TagFilter
+     in standalone files under assets/js/extended/. This partial is the one
+     exception: the wiring is generated inline because it is parametric — the
+     DOM ids, pill selector and active class all depend on the arguments
+     above, which only Hugo knows at build time. */}}
+{{- if or $paginate $filter -}}
+<script>
+(function () {
+  function init() {
+    var grid = document.getElementById('{{ $id }}-grid');
+    if (!grid) return;
+    var articles = Array.from(grid.querySelectorAll('.article-card'));
+    {{- if $paginate }}
+    var paginator = new Paginator({
+      articles: articles,
+      topEl:    document.getElementById('{{ $id }}-pagination-top'),
+      bottomEl: document.getElementById('{{ $id }}-pagination-bottom'),
+      perPage:  10
+    });
+    {{- else }}
+    articles.forEach(function (a) { a.style.display = ''; });
+    {{- end }}
+
+    {{- if $filter }}
+    new TagFilter({
+      items:       articles,
+      pills:       document.querySelectorAll({{ if $pillSelector }}'{{ $pillSelector }}'{{ else }}'#{{ $id }}-tag-cloud .tag-pill'{{ end }}),
+      activeClass: '{{ $activeClass }}'{{ if $paginate }},
+      paginator:   paginator{{ end }}
+    });
+    {{- end }}
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+{{- end -}}

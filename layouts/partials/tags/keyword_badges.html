@@ -1,0 +1,7 @@
+{{- with . -}}
+<div class="keywords">
+  {{- range . -}}
+    <a href="/articles/?tag={{ lower . }}" class="keyword" data-tag="{{ lower . }}">{{ partial "tags/tag_label.html" . }}</a>
+  {{- end -}}
+</div>
+{{- end -}}

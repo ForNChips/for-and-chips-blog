@@ -1,0 +1,12 @@
+<div class="code-block">
+  <div class="code-block-header">
+    <span class="code-block-lang">{{ .Get "lang" }}</span>
+    <button class="code-copy-btn" onclick="
+      var code = this.closest('.code-block').querySelector('code').innerText;
+      navigator.clipboard.writeText(code);
+      this.textContent = 'Copied!';
+      setTimeout(() => this.textContent = 'Copy', 2000);
+    ">Copy</button>
+  </div>
+  {{ highlight (.Inner) (.Get "lang") "" }}
+</div>

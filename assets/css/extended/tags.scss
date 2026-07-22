@@ -1,0 +1,92 @@
+/* ============================================================
+   Tag pills (shared by every tag-cloud surface)
+   ============================================================ */
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 500;
+  transition: filter 0.15s ease, transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+  background: var(--tag-bg);
+  color: var(--content);
+
+  &:hover {
+    filter: brightness(0.88);
+    transform: translateY(-2px);
+  }
+
+  &--active {
+    background: var(--accent);
+    color: var(--button-text);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &__count {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+}
+
+/* ── Per-tag colors ────────────────────────────────────────
+   Single source of truth for all tag-colored elements:
+   active filter pills, inline tag badges, keyword badges,
+   and author chip active states.
+
+   To add a new official tag: add one entry to the $tags map.
+──────────────────────────────────────────────────────────── */
+
+$tags: (
+  "ios":              #63AEFF,
+  "android":          #3BD473,
+  "mobile_forensic":  #EB4994,
+  "car_forensic":     #FF6B6B,
+  "car_crash":        #DC2626,
+  "location":         #F6E05E,
+  "activity":         #FF8ED1,
+  "exif":             #ABBCFF,
+  "browser_history":  #4FD1C5,
+  "database":         #F97316,
+  "logs":             #B978FA,
+  "protobuf":         #FCA66D,
+  "standard":         #E5E5EA,
+  "malwares":         #FF6B6B,
+  "forensique":       #38BDF8,
+  "cryptographie":    #34D399,
+);
+
+@each $tag, $color in $tags {
+  .tag-pill--active[data-tag="#{$tag}"],
+  .tag[data-tag="#{$tag}"],
+  .keyword[data-tag="#{$tag}"],
+  .author-tag-chip--active[data-tag="#{$tag}"] {
+    background: $color;
+    color: #000;
+  }
+}
+
+/* ── Hidden tag cloud (shown/hidden externally) ───────────── */
+.articles-tag-cloud--hidden {
+  display: none;
+}
+
+/* ── Author top-tag chip: active state ───────────────────── */
+/* Fallback (tag not in map): accent color */
+.author-tag-chip--active {
+  background: var(--accent);
+  color: var(--button-text);
+
+  .author-tag-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+}

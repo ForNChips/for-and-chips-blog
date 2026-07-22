@@ -1,0 +1,7 @@
+{{- /* Returns the display label for a tag.
+       Argument: the tag string (any case).
+       Looks the lowercased tag up in data/tags.yml (keywords map) and
+       returns its `label`; falls back to the tag as given. */ -}}
+{{- $label := . -}}
+{{- with index hugo.Data.tags.keywords (lower .) -}}{{- $label = .label -}}{{- end -}}
+{{- return $label -}}

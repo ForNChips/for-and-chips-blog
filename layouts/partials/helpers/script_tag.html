@@ -1,0 +1,7 @@
+{{- /*
+  Emits a minified + fingerprinted <script defer> tag for an asset path.
+  Fingerprinting busts the 1-year immutable cache in static/_headers.
+  Usage: partial "helpers/script_tag.html" "js/extended/foo.js"
+*/ -}}
+{{- $s := resources.Get . | minify | fingerprint -}}
+<script src="{{ $s.RelPermalink }}" integrity="{{ $s.Data.Integrity }}" defer></script>

@@ -1,0 +1,14 @@
+{{- with .Params.files_path }}
+<div class="article-section article-paths">
+  <h2 class="article-section-title">Path</h2>
+  <div class="article-section-content">
+    {{ range . }}
+    <div class="source-path">
+      <span class="source-path-label">📍 {{ .label }}:</span>
+      <code class="source-path-value">{{ .path }}</code>
+      <span class="source-path-datastructure">(datastructure: {{ .datastructure }})</span>
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{- end }}

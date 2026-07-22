@@ -1,0 +1,5 @@
+{{- /* Standard tag badge: a link to /articles/ pre-filtered on the tag.
+       Argument: the tag string (any case). The `data-tag` attribute drives
+       the per-tag colours in tags.scss. */ -}}
+{{- $key := lower . -}}
+<a href="/articles/?tag={{ $key }}" class="tag" data-tag="{{ $key }}">{{ partial "tags/tag_label.html" . }}</a>

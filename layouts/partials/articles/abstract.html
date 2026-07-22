@@ -1,0 +1,8 @@
+{{- if .Description }}
+<div class="article-section article-description">
+  <h2 class="article-section-title">Abstract</h2>
+  <div class="article-section-content">
+    {{ .Description | markdownify }}
+  </div>
+</div>
+{{- end }}

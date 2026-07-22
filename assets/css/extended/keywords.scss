@@ -1,0 +1,37 @@
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.3rem 0;
+
+  .keyword {
+    background-color: var(--tag-bg);
+    color: var(--content);
+    font-size: 0.78rem;
+    opacity: 0.9;
+    font-family: "Avenir Next";
+    font-weight: 600;
+    letter-spacing: 0.035em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    line-height: 1.9;
+  }
+}
+
+/* On the single author page the keywords sit inside .author-info:
+   left-align them and prepend the "Flavours :" label. */
+.author-info .keywords {
+  justify-content: flex-start;
+  align-items: center;
+
+  &::before {
+    content: "Favourite flavours :";
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--secondary);
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,117 @@
+.authors-page {
+
+  /* ── Search bar ─────────────────────────────────────── */
+  .authors-search,
+  .list-search {
+    margin-bottom: 4rem;
+    .search-bar {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  }
+
+  /* ── Grid ───────────────────────────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  /* ── Card ───────────────────────────────────────────── */
+  .card {
+    position: relative;               /* anchor for stretched link */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--entry);         /* fixed: was --primary (too dark) */
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--tertiary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+    }
+  }
+
+  /* ── Stretched link ─────────────────────────────────── */
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+
+    /* covers the entire card */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      z-index: 0;
+    }
+
+    .photo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .info {
+      text-align: center;
+
+      h2 {
+        margin: 0.25rem 0;
+        font-size: 1.15rem;
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .affiliations {
+        font-size: 0.82rem;
+        margin: 0.25rem 0 0;
+        padding: 0;
+        list-style: none;
+        color: var(--secondary);
+        li { margin-bottom: 0.15rem; }
+      }
+    }
+  }
+
+  /* ── Footer: above the stretched-link overlay ────────── */
+  .card-footer {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;           /* above ::after overlay */
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+
+    .social-link {
+      font-size: 1.1em;
+      color: var(--secondary);
+      position: relative;
+      z-index: 1;
+      &:hover { color: var(--accent); }
+    }
+  }
+
+  /* keyword badges also need z-index */
+  .keywords {
+    position: relative;
+    z-index: 1;
+  }
+}

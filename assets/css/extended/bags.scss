@@ -1,0 +1,260 @@
+/* ============================================================
+   Bags — index page + single-bag page
+   ============================================================ */
+
+.bags-page {
+
+  /* ── Intro paragraph under the H1 (index page) ────────── */
+  .bags-intro {
+    max-width: 640px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    color: var(--secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+
+    p { margin: 0; }
+  }
+
+  /* ── Grid of bag cards (index page) ───────────────────── */
+  .bags-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bag-card {
+    background: var(--entry);
+    border: 1px solid var(--tertiary);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+    }
+  }
+
+  .bag-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.4rem 1.4rem 1rem;
+    text-decoration: none;
+    color: inherit;
+    flex-grow: 1;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--secondary);
+      margin: 0;
+      flex-grow: 1;
+    }
+  }
+
+  .bag-card__count {
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .bag-card__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0 1.4rem 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    li { margin: 0; }
+  }
+
+  /* ── Single bag page ──────────────────────────────────── */
+  .bag-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      /* inherits centered title from page-titles.scss */
+      margin-bottom: 0.6rem;
+    }
+  }
+
+  .bag-description {
+    max-width: 640px;
+    margin: 0 auto;
+    color: var(--secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .bag-intro {
+    max-width: 720px;
+    margin: 0 auto 3rem;
+    color: var(--content);
+    line-height: 1.7;
+
+    p { margin: 0 0 1rem; }
+  }
+
+  /* ── Articles list inside a bag ───────────────────────── */
+  .bag-articles__title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.5rem;
+  }
+
+  .bag-article-list {
+    list-style: none;
+    counter-reset: bag-step;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .bag-article {
+    counter-increment: bag-step;
+    background: var(--entry);
+    border: 1px solid var(--tertiary);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+    }
+
+    a {
+      display: block;
+      padding: 1.2rem 1.4rem 1.2rem 3.6rem;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Numbered step badge */
+    a::before {
+      content: counter(bag-step);
+      position: absolute;
+      left: 1.1rem;
+      top: 1.15rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--button-text);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 0.35rem;
+      line-height: 1.35;
+    }
+
+    p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--secondary);
+      margin: 0 0 0.5rem;
+    }
+  }
+
+  .bag-article__meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--secondary);
+    opacity: 0.75;
+  }
+
+  .bag-articles__empty {
+    text-align: center;
+    color: var(--secondary);
+  }
+}
+
+/* ============================================================
+   "Part of <bag>" badge — shown on article single pages
+   ============================================================ */
+.article-bags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.8rem 0 0.4rem;
+}
+
+.article-bag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: var(--tertiary);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  font-size: 0.8rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: var(--accent);
+    color: var(--button-text);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+
+    .article-bag-pill__icon { color: var(--button-text); }
+  }
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+.article-bag-pill__icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .bags-page {
+    .bag-article a {
+      padding-left: 1.4rem;
+      padding-top: 3rem;
+    }
+    .bag-article a::before {
+      top: 0.9rem;
+      left: 0.9rem;
+    }
+  }
+}

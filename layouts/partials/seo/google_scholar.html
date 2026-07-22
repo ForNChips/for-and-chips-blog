@@ -1,0 +1,22 @@
+{{- if and .IsPage (eq .Type "article") -}}
+<meta name="citation_title" content="{{ .Title | plainify }}">
+<meta name="citation_journal_title" content="{{ site.Title }}">
+<meta name="citation_publication_date" content="{{ .Date.Format "2006/01/02" }}">
+<meta name="citation_fulltext_html_url" content="{{ .Permalink }}">
+{{- with .Description }}
+<meta name="citation_abstract_html_url" content="{{ $.Permalink }}">
+{{- end }}
+{{- range .Params.authors }}
+  {{- $id := .id }}
+  {{- $data := index hugo.Data.authors $id }}
+  {{- if $data }}
+<meta name="citation_author" content="{{ $data.last_name }}, {{ $data.first_name }}">
+    {{- with $data.links.orcid }}
+<meta name="citation_author_orcid" content="https://orcid.org/{{ . }}">
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- range .Params.tags }}
+<meta name="citation_keywords" content="{{ . }}">
+{{- end }}
+{{- end -}}

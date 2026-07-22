@@ -1,0 +1,20 @@
+{{ define "main" }}
+
+<main class="authors-page">
+
+  <h1>{{ .Title }}</h1>
+
+  <section>
+    {{ partial "search_bar.html" (dict
+         "placeholder"  "Search authors…"
+         "ariaLabel"    "Search authors"
+         "inputId"      "authorSearch"
+         "type"         "search"
+         "wrapperClass" "list-search") }}
+
+    {{ partial "authors/authors_list.html" . }}
+  </section>
+
+</main>
+
+{{ end }}

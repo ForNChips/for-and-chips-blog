@@ -1,0 +1,71 @@
+{{- define "main" }}
+
+{{/* ─────────────────────────────────────────────────────────────
+     /tools/<slug>/ — single tool page (type: "tool").
+     A slimmed-down cousin of article/single.html: same post-single
+     shell and classes (PaperMod + article.scss), minus the article
+     machinery that makes no sense for a tool (authors, citations,
+     bags badge, reading progress, source paths).
+     ───────────────────────────────────────────────────────────── */}}
+
+<article class="post-single">
+
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+
+    {{- with .Params.tags }}
+    <ul class="post-tags">
+      {{- range . }}
+      {{/* Shared tag vocabulary, but the badge filters /tools/, not /articles/. */}}
+      <li><a href="/tools/?tag={{ lower . }}" class="tag" data-tag="{{ lower . }}">{{ partial "tags/tag_label.html" . }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+
+    <h1 class="post-title entry-hint-parent">
+      {{ .Title }}
+      {{- if .Draft }} <span class="entry-hint" title="Draft">Draft</span>{{ end }}
+    </h1>
+
+    <div class="post-meta">
+      {{- $cat := .Params.category }}
+      {{- with $cat }}<span>{{ . }}</span>{{ end }}
+      {{- with .Params.platforms }}
+        {{- if $cat }} · {{ end }}<span>{{ delimit . ", " }}</span>
+      {{- end }}
+      {{- with .Params.lastmod }}
+      <span class="article-lastmod">· Updated {{ . | time.Format ":date_long" }}</span>
+      {{- end }}
+    </div>
+
+    {{- if or .Params.repo .Params.website }}
+    <div class="tool-links">
+      {{- with .Params.repo }}
+      <a href="{{ . }}" rel="noopener noreferrer" target="_blank">Source repository ↗</a>
+      {{- end }}
+      {{- with .Params.website }}
+      <a href="{{ . }}" rel="noopener noreferrer" target="_blank">Website ↗</a>
+      {{- end }}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- if .Description }}
+  <div class="post-description">
+    {{ .Description | markdownify }}
+  </div>
+  {{- end }}
+
+  {{- with .Resources.GetMatch "images/cover.*" }}
+  <figure class="entry-cover">
+    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy" decoding="async">
+  </figure>
+  {{- end }}
+
+  <div class="post-content">
+    {{ .Content }}
+  </div>
+
+</article>
+
+{{ end }}

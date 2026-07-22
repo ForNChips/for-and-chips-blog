@@ -1,0 +1,111 @@
+{{ if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": {{ site.Title }},
+  "url": {{ site.Home.Permalink }},
+  "description": {{ site.Params.description | plainify | truncate 180 | safeHTML }}
+}
+</script>
+{{- else if (or .IsPage .IsSection) }}
+
+{{/* BreadcrumbList */}}
+{{- $url := replace .Parent.Permalink (printf "%s" site.Home.Permalink) "" }}
+{{- $lang_url := strings.TrimPrefix (printf "%s/" .Lang) $url }}
+{{- $bc_list := (split $lang_url "/") }}
+{{- $scratch := newScratch }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+  {{- range $index, $element := $bc_list }}
+    {{- $scratch.Add "path" (printf "%s/" $element) | safeJS }}
+    {{- $bc_pg := site.GetPage ($scratch.Get "path") }}
+    {{- if (and ($bc_pg) (gt (len .) 0)) }}
+    {{- if (and $index) }}, {{ end }}
+    {
+      "@type": "ListItem",
+      "position": {{ add 1 $index }},
+      "name": {{ $bc_pg.Name }},
+      "item": {{ $bc_pg.Permalink | safeHTML }}
+    }
+    {{- end }}
+  {{- end }}
+  {{- if (ge (len $bc_list) 2) }}, {{ end }}
+    {
+      "@type": "ListItem",
+      "position": {{ len $bc_list }},
+      "name": {{ .Name }},
+      "item": {{ .Permalink | safeHTML }}
+    }
+  ]
+}
+</script>
+
+{{- if .IsPage }}
+{{- /* For+Chips: BlogPosting with enhanced authors (ORCID), manual lastmod */}}
+{{- $desc := .Description | default .Summary | plainify }}
+{{- $ISO8601 := "2006-01-02T15:04:05-07:00" }}
+{{- $dateModified := .PublishDate }}
+{{- with .Params.lastmod }}{{- $dateModified = . | time.AsTime }}{{- end }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ .Title | plainify }},
+  "description": {{ $desc | truncate 200 }},
+  "keywords": [{{ range $i, $e := .Params.tags }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}],
+  "articleBody": {{ .Content | safeJS | htmlUnescape | plainify }},
+  "wordCount": "{{ .WordCount }}",
+  "inLanguage": {{ .Language.Lang | default "en-us" }},
+  "datePublished": {{ .PublishDate.Format $ISO8601 }},
+  "dateModified": {{ $dateModified.Format $ISO8601 }},
+  {{- /* Cover image: page bundle first */}}
+  {{- $coverImg := .Resources.GetMatch "images/cover.*" }}
+  {{- if $coverImg }}
+  "image": {{ $coverImg.Permalink }},
+  {{- else if .Params.cover.image }}
+  "image": {{ .Params.cover.image | absURL }},
+  {{- end }}
+  {{- /* Authors with ORCID sameAs */}}
+  {{- with .Params.authors }}
+  "author": [
+    {{- range $i, $a := . }}
+    {{- $id := $a.id }}
+    {{- $data := index hugo.Data.authors $id }}
+    {{- if $data }}
+    {{ if $i }},{{ end }}{
+      "@type": "Person",
+      "name": "{{ $data.first_name }} {{ $data.last_name }}",
+      "url": "{{ site.BaseURL }}author/{{ $id }}/"
+      {{- $sameAs := slice -}}
+      {{- with $data.links.orcid -}}{{- $sameAs = $sameAs | append (printf "https://orcid.org/%s" .) -}}{{- end -}}
+      {{- with $data.links.linkedin -}}{{- $sameAs = $sameAs | append . -}}{{- end -}}
+      {{- with $data.links.github -}}{{- $sameAs = $sameAs | append . -}}{{- end -}}
+      {{- with $data.links.x -}}{{- $sameAs = $sameAs | append (printf "https://x.com/%s" .) -}}{{- end -}}
+      {{- if $sameAs }},
+      "sameAs": [{{ range $j, $u := $sameAs }}{{ if $j }},{{ end }}"{{ $u }}"{{ end }}]
+      {{- end }}
+    }
+    {{- end }}
+    {{- end }}
+  ],
+  {{- end }}
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": {{ .Permalink | safeHTML }}
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ site.Title }},
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ site.Params.assets.favicon | default "favicon.ico" | absURL }}
+    }
+  }
+}
+</script>
+{{- end }}{{/* .IsPage */}}
+{{- end -}}

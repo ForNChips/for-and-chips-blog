@@ -1,0 +1,24 @@
+{{- /* Page-level search bar (magnifier icon + text input).
+       Used by the /articles, /bags and /authors list pages — the navbar
+       search in header.html has its own markup (input + submit button).
+       Params (dict):
+         placeholder  — input placeholder text (required)
+         ariaLabel    — accessible label (default: placeholder)
+         inputId      — optional id attribute on the input
+         type         — input type (default "text")
+         wrapperClass — outer wrapper class (default "article-list-search") */ -}}
+{{- $placeholder  := .placeholder -}}
+{{- $ariaLabel    := .ariaLabel    | default $placeholder -}}
+{{- $type         := .type         | default "text" -}}
+{{- $wrapperClass := .wrapperClass | default "article-list-search" -}}
+<div class="{{ $wrapperClass }}">
+  <div class="search-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input type="{{ $type }}"{{ with .inputId }} id="{{ . }}"{{ end }} placeholder="{{ $placeholder }}" aria-label="{{ $ariaLabel }}"/>
+  </div>
+</div>

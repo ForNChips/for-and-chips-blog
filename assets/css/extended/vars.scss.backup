@@ -1,0 +1,59 @@
+:root {
+    /* ── Layout ───────────────────────────────────────────── */
+    --gap: 24px;
+    --content-gap: 20px;
+    --nav-width: 95%;
+    --main-width: 85%;
+    --header-height: 100px;
+    --footer-height: 60px;
+    --radius: 8px;
+
+    /* ── Light mode: clean canvas, salsa accent ──────────── */
+    /*
+     * PaperMod variable roles (do not swap!):
+     *   --primary   = main body text color + pagination button bg
+     *   --secondary = meta/muted text (dates, reading time, footer)
+     *   --tertiary  = subtle backgrounds (blockquotes, tag chips, search border)
+     *   --content   = article body text inside .post-content
+     */
+    --theme:      #FFFFFF;
+    --entry:      #F7F5F0;          /* card / entry background — barely warm */
+    --background: #FFFFFF;
+    --primary:    #1A1204;          /* main text — very dark warm brown-black */
+    --secondary:  #6B5232;          /* meta text — warm brown, WCAG AA on white */
+    --tertiary:   #FFF0D8;          /* blockquote/chip bg — warm chip-cream */
+    --content:    #222222;          /* article body text */
+    --text:       #1A1204;          /* used by custom CSS */
+    --accent:     #C42B0C;          /* salsa red — buttons, links, active tags */
+    --border:     #E8E2D8;          /* warm gray border */
+    --tag-bg:     #EDE8DC;          /* default (uncolored) tag background */
+    --code-block-bg: #1A1204;
+    --code-bg:    #F5F0E8;
+    --keyword-standard: #E5E5EA;
+    --color-linkedin: #0073b1;
+    --text-muted: #888880;
+    --button-text: #ffffff;
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    /* ── Dark mode: neutral dark, golden accent ──────────── */
+    --theme:      #141414;
+    --entry:      #1E1E1E;
+    --background: #141414;
+    --primary:    #EEEAD8;          /* main text — warm off-white */
+    --secondary:  #A89070;          /* meta text — warm golden-brown, WCAG AA on #141414 */
+    --tertiary:   #201808;          /* blockquote/chip bg — very dark warm */
+    --content:    #D0C8B0;          /* article body text */
+    --text:       #EEEAD8;
+    --accent:     #F0B429;          /* melted cheese yellow */
+    --border:     #2C2C2C;
+    --tag-bg:     rgba(240, 180, 41, 0.12);
+    --code-block-bg: #0E0E0E;
+    --code-bg:    #201808;
+    --keyword-standard: #3A3A42;
+    --color-linkedin: #0073b1;
+    --text-muted: #888880;
+    --button-text: #141414;         /* dark text on yellow buttons */
+    color-scheme: dark;
+}

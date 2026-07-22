@@ -1,0 +1,13 @@
+{{- $index := slice -}}
+{{- range site.RegularPages -}}
+  {{- if eq .Section "articles" -}}
+    {{- /* No "content" field: navbar-search.js only indexes title + summary,
+           and full .Plain text would balloon the payload as articles grow. */ -}}
+    {{- $index = $index | append (dict
+      "title" .Title
+      "summary" (.Description | default "")
+      "permalink" .Permalink
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{- $index | jsonify -}}

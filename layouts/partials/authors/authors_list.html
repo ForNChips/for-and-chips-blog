@@ -1,0 +1,66 @@
+<div id="authors-pagination-top"></div>
+
+<div class="grid" id="authors-grid">
+    {{ range $key, $author := hugo.Data.authors }}
+
+      {{/* Resolve the author photo, falling back to default.png */}}
+      {{ $photo := "default.png" }}
+      {{ if and (isset $author "photo") (ne $author.photo "") }}
+        {{ $photo = $author.photo }}
+      {{ end }}
+      {{/* Guard against typo'd filenames, then serve a resized WebP thumb. */}}
+      {{ $imageRaw := resources.Get (printf "images/authors/%s" $photo) | default (resources.Get "images/authors/default.png") }}
+      {{ $image := partial "helpers/thumb.html" (dict "img" $imageRaw "maxWidth" 300) }}
+
+      <div class="card" style="display:none" data-name="{{ lower $author.first_name }} {{ lower $author.last_name }}" data-affiliations="{{- if $author.current_affiliations -}}{{- range $aff, $role := $author.current_affiliations -}}{{ lower $aff }} {{ end -}}{{- end -}}" data-keywords="{{- with $author.keywords -}}{{ range $i, $kw := . -}}{{ lower $kw }} {{ end -}}{{ end -}}">
+
+        <a href="/author/{{ $key }}/" class="card-link">
+          <img src="{{ $image.RelPermalink }}"
+              alt="{{ $author.first_name }} {{ $author.last_name }}"
+              width="{{ $image.Width }}" height="{{ $image.Height }}"
+              class="photo" loading="lazy" decoding="async">
+
+          <div class="info">
+            <h2>{{ upper $author.last_name }} {{ $author.first_name }}</h2>
+            {{ with $author.current_affiliations }}
+              <ul class="affiliations">
+                {{ range $aff, $role := . }}
+                  <li>{{ $role }} at {{ $aff }}</li>
+                {{ end }}
+              </ul>
+            {{ end }}
+          </div>
+        </a>
+
+        <div class="card-footer">
+          {{ partial "tags/keyword_badges.html" $author.keywords }}
+
+          <div class="links">
+            {{- $order := slice "orcid" "researchgate" "linkedin" "github" "x" "website" -}}
+            {{- range $order -}}
+              {{- $k := . -}}
+              {{- $v := index $author.links $k -}}
+              {{- if $v -}}
+            <a href="{{ $v }}" target="_blank" rel="noopener noreferrer" title="{{ $k | title }}" class="social-link">
+              {{- partial "helpers/social_icon.html" $k -}}
+            </a>
+              {{- end -}}
+            {{- end -}}
+          </div>
+        </div>
+
+      </div>
+
+    {{ end }}
+  </div>
+
+<div id="authors-pagination-bottom"></div>
+
+{{- if (site.Params.authors.showCollabGraph | default true) }}
+  <div class="collab-graph-link">
+    <a href="/collab/" class="collab-graph-link__anchor" title="Co-authorship network">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Collaboration graph
+    </a>
+  </div>
+{{- end }}

@@ -1,0 +1,34 @@
+{{- $authors := slice -}}
+{{- range .Params.authors -}}
+  {{- $id := .id -}}
+  {{- $data := index hugo.Data.authors $id -}}
+  {{- if $data -}}
+    {{- $name := printf "%s, %s." $data.last_name (substr $data.first_name 0 1) -}}
+    {{- $authors = $authors | append $name -}}
+  {{- end -}}
+{{- end -}}
+{{- $authorStr := delimit $authors ", " -}}
+{{- $year := .Date.Format "2006" -}}
+{{- $citation := printf "%s (%s). %s. %s. Retrieved from %s" $authorStr $year (.Title | plainify) site.Title .Permalink -}}
+<div class="citation-block">
+  <h3 class="citation-title">Cite this article</h3>
+  <p class="citation-text" id="citation-text">{{ $citation }}</p>
+  <button class="citation-copy-btn" aria-label="Copy citation to clipboard" onclick="
+    var t = document.getElementById('citation-text').innerText;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(t).then(function() {
+        var b = this; b.textContent = 'Copied!';
+        setTimeout(function() { b.textContent = 'Copy citation'; }, 2000);
+      }.bind(this));
+    } else {
+      var r = document.createRange();
+      r.selectNodeContents(document.getElementById('citation-text'));
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(r);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+      this.textContent = 'Copied!';
+      setTimeout(function(b){ b.textContent = 'Copy citation'; }.bind(this, this), 2000);
+    }
+  ">Copy citation</button>
+</div>

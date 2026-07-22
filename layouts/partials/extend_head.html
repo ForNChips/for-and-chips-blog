@@ -1,0 +1,73 @@
+{{- $opts := dict "transpiler" "dartsass" "outputStyle" "compressed" }}
+{{- $main := resources.Get "css/extended/main.scss" | css.Sass $opts | fingerprint }}
+<link rel="stylesheet" href="{{ $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}">
+
+{{- $print := resources.Get "css/extended/print.scss" | css.Sass $opts | fingerprint }}
+<link rel="stylesheet" href="{{ $print.RelPermalink }}" integrity="{{ $print.Data.Integrity }}" media="print">
+
+{{- partial "analytics.html" . }}
+{{- partial "seo/google_scholar.html" . }}
+
+{{- /* ── Global UI JS (every page) ── */}}
+{{- partial "helpers/script_tag.html" "js/extended/nav-scroll.js" }}
+
+{{- partial "helpers/script_tag.html" "js/extended/nav-hamburger-menu.js" }}
+
+{{- partial "helpers/script_tag.html" "js/fuse.basic.min.js" }}
+
+{{- partial "helpers/script_tag.html" "js/extended/navbar-search.js" }}
+
+{{- if not site.Params.disableThemeToggle }}
+{{- partial "helpers/script_tag.html" "js/extended/theme-toggle.js" }}
+{{- end }}
+
+{{- if not site.Params.disableScrollToTop }}
+{{- partial "helpers/script_tag.html" "js/extended/top-link.js" }}
+{{- end }}
+
+{{- /* ── Code-copy buttons (article pages with ShowCodeCopyButtons) ── */}}
+{{- if and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (.Param "ShowCodeCopyButtons") }}
+<script>window.__chipsI18n = { codeCopy: "{{ i18n "code_copy" | default "copy" }}", codeCopied: "{{ i18n "code_copied" | default "copied!" }}" };</script>
+{{- partial "helpers/script_tag.html" "js/extended/copy-code.js" }}
+{{- end }}
+
+{{- /* ── Article reading-progress bar ── */}}
+{{- if and .IsPage (eq .Type "article") }}
+{{- partial "helpers/script_tag.html" "js/extended/progress-bar.js" }}
+{{- end }}
+
+{{- /* ── Paginator + page-specific filters ──
+       Defer-ordered: paginator first, then the consumer that uses it. */}}
+{{- $isArticlesList := and (eq .Section "articles") (eq .Kind "section") }}
+{{- $isAuthorsList  := eq .Layout "authors" }}
+{{- $isAuthorPage   := and (eq .Type "author") (eq .Kind "page") }}
+{{- $isBagsIndex    := and (eq .Section "bags") (eq .Kind "section") (eq .Path "/bags") }}
+{{- $isToolsList    := and (eq .Section "tools") (eq .Kind "section") }}
+{{- $needsPaginator := or $isArticlesList $isAuthorsList $isAuthorPage }}
+{{- $needsTagFilter := or $isArticlesList $isAuthorsList $isAuthorPage $isBagsIndex $isToolsList }}
+
+{{- if $needsPaginator }}
+{{- partial "helpers/script_tag.html" "js/extended/paginator.js" }}
+{{- end }}
+
+{{- /* Shared tag-pill filter engine — loaded before any page-specific wiring
+       that constructs a TagFilter (articles, authors, author, bags). */}}
+{{- if $needsTagFilter }}
+{{- partial "helpers/script_tag.html" "js/extended/tag-filter.js" }}
+{{- end }}
+
+{{- if $isArticlesList }}
+{{- partial "helpers/script_tag.html" "js/extended/articles-filter.js" }}
+{{- end }}
+
+{{- if $isAuthorsList }}
+{{- partial "helpers/script_tag.html" "js/extended/authors-filter.js" }}
+{{- end }}
+
+{{- if $isBagsIndex }}
+{{- partial "helpers/script_tag.html" "js/extended/bags-filter.js" }}
+{{- end }}
+
+{{- if $isToolsList }}
+{{- partial "helpers/script_tag.html" "js/extended/tools-filter.js" }}
+{{- end }}

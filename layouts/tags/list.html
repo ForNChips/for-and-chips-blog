@@ -1,0 +1,16 @@
+{{- define "main" }}
+
+{{/* /tags (taxonomy listing) and /tags/<term> term pages both redirect to /articles,
+     which already provides tag filtering via the ?tag= query param. */}}
+
+{{- if eq .Kind "taxonomy" }}
+<script>window.location.replace('/articles/');</script>
+<noscript><meta http-equiv="refresh" content="0; url=/articles/"></noscript>
+<p>Redirecting to <a href="/articles/">/articles/</a>…</p>
+{{- else }}
+<script>window.location.replace('/articles/?tag={{ lower .Title }}');</script>
+<noscript><meta http-equiv="refresh" content="0; url=/articles/?tag={{ lower .Title }}"></noscript>
+<p>Redirecting to <a href="/articles/?tag={{ lower .Title }}">/articles/?tag={{ lower .Title }}</a>…</p>
+{{- end }}
+
+{{- end }}

@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════════
+   Print — minimal version
+   The PDF is the screen page, stripped down. The chrome (header,
+   footer, TOC, related, citation, donation, comments, PDF button)
+   is hidden and a few adjustments are made for paper.
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+
+  @page {
+    size: A4 portrait;
+    margin: 20mm 18mm;
+  }
+
+  /* Force colour rendering and a white background */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  html, body { background: #fff !important; }
+
+  /* Hide everything "screen-only" plus the site chrome */
+  .screen-only,
+  .header, .footer, .top-link, #reading-progress,
+  .post-tags, .breadcrumbs, .toc,
+  .article-lastmod, .entry-hint,
+  nav { display: none !important; }
+
+  /* Reset widths to use the full page */
+  body, .main, .post-single {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Avoid unwanted page breaks */
+  h1, h2, h3, h4 { break-after: avoid; }
+  figure, table, blockquote, pre { break-inside: avoid; }
+  img { max-width: 100% !important; height: auto !important; }
+
+  /* Links: show the URL in brackets (except internal anchors) */
+  .post-content a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+  }
+}

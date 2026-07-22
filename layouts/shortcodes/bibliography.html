@@ -1,0 +1,31 @@
+{{- $refs := .Page.Params.references -}}
+{{- if $refs -}}
+<ul class="bibliography-list">
+  {{- range $refs -}}
+    {{- $entry := index hugo.Data.references . -}}
+    <li id="ref-{{ . }}" class="bibliography-entry">
+      {{- if $entry -}}
+        <span class="ref-authors">{{ $entry.authors }}</span>
+        ({{ $entry.year }}).
+        {{- if eq $entry.type "book" }}
+          <em class="ref-title">{{ $entry.title }}</em>.
+          {{- with $entry.journal }} {{ . }}.{{ end -}}
+        {{- else if eq $entry.type "inproceedings" }}
+          '{{ $entry.title }}'.
+          {{- with $entry.journal }} In: <em>{{ . }}</em>.{{ end -}}
+        {{- else }}
+          '{{ $entry.title }}'.
+          {{- with $entry.journal }} <em>{{ . }}</em>{{ end -}}
+          {{- with $entry.volume }}, {{ . }}{{ end -}}
+          {{- with $entry.number }}({{ . }}){{ end -}}
+          {{- with $entry.pages }}, pp. {{ . }}{{ end -}}.
+        {{- end }}
+        {{- with $entry.doi }} doi:<a href="https://doi.org/{{ . }}" target="_blank" rel="noopener">{{ . }}</a>.{{ end -}}
+        {{- with $entry.url }} [<a href="{{ . }}" target="_blank" rel="noopener">online</a>].{{ end -}}
+      {{- else -}}
+        <span class="ref-missing">Reference '{{ . }}' not found in data/references.yml</span>
+      {{- end -}}
+    </li>
+  {{- end -}}
+</ul>
+{{- end -}}

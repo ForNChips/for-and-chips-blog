@@ -1,0 +1,48 @@
+/* ============================================================
+   Search bar component
+   Used on: article list page, author pages
+   ============================================================ */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: var(--search-bg);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 0.5rem 0.8rem 0.5rem 1.2rem;
+  transition: border-color 0.2s ease;
+
+  &:focus-within { border-color: var(--accent); }
+
+  svg { flex-shrink: 0; opacity: 0.5; }
+
+  input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+    color: inherit;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 1rem;
+    padding: 0 0.2rem;
+    opacity: 0.7;
+    &:hover { opacity: 1; }
+  }
+}
+
+.article-list-search {
+  margin-bottom: 2rem;
+
+  .search-bar {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}

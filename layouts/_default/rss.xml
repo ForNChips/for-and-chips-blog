@@ -1,0 +1,38 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>{{ if eq .Title site.Title }}{{ site.Title }}{{ else }}{{ with .Title }}{{ . }} | {{ end }}{{ site.Title }}{{ end }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}</description>
+    <generator>Hugo</generator>
+    <language>{{ site.Language.Locale }}</language>
+    {{- /* managingEditor/webMaster omitted: the RSS spec requires an email
+           address there and the site has no public one. */}}
+    {{ with site.Params.author }}<copyright>{{ site.Title }}</copyright>{{ end }}
+    {{- with .OutputFormats.Get "RSS" }}
+    <atom:link href="{{ .Permalink }}" rel="self" type="application/rss+xml"/>
+    {{- end }}
+    {{ range .Pages }}
+    <item>
+      <title>{{ .Title | plainify }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
+      <guid>{{ .Permalink }}</guid>
+      {{- range .Params.authors }}
+        {{- $id := .id -}}
+        {{- $data := index hugo.Data.authors $id -}}
+        {{- if $data }}
+      <dc:creator>{{ $data.first_name }} {{ $data.last_name }}</dc:creator>
+        {{- end }}
+      {{- end }}
+      {{- range .Params.tags }}
+      <category>{{ . }}</category>
+      {{- end }}
+      <description>{{ with .Description }}{{ . | markdownify | html }}{{ else }}{{ .Summary | html }}{{ end }}</description>
+      {{- with .Content }}
+      <content:encoded><![CDATA[{{ . | safeHTML }}]]></content:encoded>
+      {{- end }}
+    </item>
+    {{ end }}
+  </channel>
+</rss>

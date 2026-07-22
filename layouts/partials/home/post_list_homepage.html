@@ -1,0 +1,25 @@
+{{- $ctx := .ctx -}}
+{{- $authorID := .authorKey | default "" -}}
+
+{{- $posts := where site.RegularPages "Type" "article" -}}
+{{- $filtered := slice -}}
+
+{{- if eq $authorID "" -}}
+  {{- $filtered = $posts -}}
+{{- else -}}
+  {{- range $posts -}}
+    {{- $found := false -}}
+    {{- with .Params.authors -}}
+      {{- range . -}}
+        {{- if eq .id $authorID -}}{{- $found = true -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if $found -}}{{- $filtered = $filtered | append . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if gt (len $filtered) 0 -}}
+  {{- partial "articles/cards.html" (dict "posts" $filtered "limit" 6 "id" "home") -}}
+{{- else -}}
+<p class="no-articles">No articles available.</p>
+{{- end -}}

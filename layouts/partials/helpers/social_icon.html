@@ -1,0 +1,10 @@
+{{- /*
+  Inlines a social SVG icon for an author-link key (orcid, researchgate,
+  linkedin, github, x, website). Icons live in assets/images/icons/social/
+  (Font Awesome Free, CC BY 4.0) — self-hosted so no CDN request is needed
+  and a strict CSP can stay third-party-free.
+  Usage: partial "helpers/social_icon.html" $key
+*/ -}}
+{{- with resources.Get (printf "images/icons/social/%s.svg" .) -}}
+{{- .Content | replaceRE `<svg ` `<svg class="social-icon" fill="currentColor" aria-hidden="true" ` | safeHTML -}}
+{{- end -}}

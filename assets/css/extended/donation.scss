@@ -1,0 +1,42 @@
+.donation-block {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0 1rem;
+}
+
+.donation-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: filter 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.9);
+    transform: translateY(-2px);
+  }
+
+  .donation-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    line-height: 1;
+  }
+
+  /* Fixed brand colours — intentionally theme-independent. */
+  &--ko-fi {
+    background: #FF5E5B;
+    color: #fff;
+    &:hover { color: #fff; }
+  }
+
+  &--buymeacoffee {
+    background: #FFDD00;
+    color: #0D0C22;
+    &:hover { color: #0D0C22; }
+  }
+}

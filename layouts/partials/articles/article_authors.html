@@ -1,0 +1,50 @@
+{{- /* Author display with affiliation numbers (shared across authors) */ -}}
+{{- $allAuthors := hugo.Data.authors }}
+{{- $postAuthors := .Params.authors }}
+
+{{- if $postAuthors }}
+
+  {{- /* 1. Build the affiliation -> number mapping */ -}}
+  {{- $affIndex := dict }}
+  {{- $counter := 1 }}
+  {{- range $i, $pa := $postAuthors }}
+      {{- range $i, $aff := $pa.affiliations }}
+          {{- if eq (index $affIndex $aff) nil }}
+              {{- $affIndex = merge $affIndex (dict $aff $counter) }}
+              {{- $counter = add $counter 1 }}
+          {{- end }}
+      {{- end }}
+  {{- end }}
+
+  {{- /* 2. Render authors with affiliation superscripts */ -}}
+  <div class="post-authors">
+    {{- range $index, $pa := $postAuthors }}
+      {{- $author := index $allAuthors $pa.id }}
+      {{- if $author }}
+        {{- $fullname := printf "%s %s" (upper $author.last_name) $author.first_name -}}
+        <span>
+          <a href="/author/{{ $pa.id }}/" class="post-author-link">
+            {{ $fullname }}
+          </a>
+          {{- range $i, $aff := $pa.affiliations }}
+            <sup>{{ index $affIndex $aff }}</sup>
+          {{- end }}
+        </span>{{ if lt (add $index 1) (len $postAuthors) }}, {{ end }}
+      {{- else }}
+        <span>{{ $pa.id }}<sup>?</sup></span>{{ if lt (add $index 1) (len $postAuthors) }}, {{ end }}
+      {{- end }}
+    {{- end }}
+  </div>
+
+  {{- /* 3. Render affiliations sorted by number */ -}}
+  <div class="author-affiliations">
+    {{- range $num := seq 1 (len $affIndex) }}
+      {{- range $aff, $val := $affIndex }}
+        {{- if eq $val $num }}
+          <div><sup>{{ $num }}</sup> {{ $aff }}</div>
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  </div>
+
+{{- end }}

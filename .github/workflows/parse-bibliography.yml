@@ -1,0 +1,37 @@
+name: Parse bibliography
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bibliography/**.bib'
+      - 'content/articles/**/*.bib'
+
+permissions:
+  contents: write
+
+jobs:
+  parse-bib:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Parse bibliography
+        run: python scripts/bib_to_yaml.py
+
+      - name: Commit references.yml
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/references.yml
+          git diff --cached --quiet \
+            && echo "data/references.yml unchanged" \
+            || (git commit -m "chore: update references.yml from .bib files" && git push)

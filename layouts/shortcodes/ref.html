@@ -1,0 +1,8 @@
+{{- $path := .Get 0 -}}
+{{- $text := .Get 1 -}}
+{{- $page := site.GetPage $path -}}
+{{- if $page -}}
+<a href="{{ $page.RelPermalink }}" class="post-xref">{{ with $text }}{{ . }}{{ else }}{{ $page.Title }}{{ end }}</a>
+{{- else -}}
+<span class="post-xref-missing" title="Page '{{ $path }}' not found in Hugo">{{ with $text }}{{ . }}{{ else }}{{ $path }}{{ end }}</span>
+{{- end -}}

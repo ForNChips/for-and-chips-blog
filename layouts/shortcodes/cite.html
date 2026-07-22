@@ -1,0 +1,21 @@
+{{- $key := .Get 0 -}}
+{{- $pageNum := .Get 1 -}}
+{{- $entry := index hugo.Data.references $key -}}
+{{- if $entry -}}
+  {{- $parts := split $entry.authors "; " -}}
+  {{- $first := index $parts 0 -}}
+  {{- $lastName := index (split $first ", ") 0 -}}
+  {{- $n := len $parts -}}
+  {{- $label := $lastName -}}
+  {{- if eq $n 2 -}}
+    {{- $secondLast := index (split (index $parts 1) ", ") 0 -}}
+    {{- $label = printf "%s and %s" $lastName $secondLast -}}
+  {{- else if gt $n 2 -}}
+    {{- $label = printf "%s et al." $lastName -}}
+  {{- end -}}
+  {{- $text := printf "%s, %v" $label $entry.year -}}
+  {{- if $pageNum -}}{{- $text = printf "%s, %s" $text $pageNum -}}{{- end -}}
+(<a class="cite-link" href="#ref-{{ $key }}">{{ $text }}</a>)
+{{- else -}}
+<span class="cite-missing" title="'{{ $key }}' not found in data/references.yml">(?, ?)</span>
+{{- end -}}

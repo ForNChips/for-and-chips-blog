@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Two jobs:
+#   1. If any .bib file is staged, regenerate data/references.yml.
+#   2. Validate every staged article whose frontmatter has draft: false.
+#      Drafts are skipped — commit early, validate when you flip the switch.
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+# ── Python resolution ───────────────────────────────────────────────────
+# Prefer uv (resolves deps from pyproject.toml, zero setup after `uv sync`);
+# fall back to the legacy hugo.venv if uv isn't installed.
+if command -v uv >/dev/null 2>&1; then
+  py() { uv run --quiet python3 "$@"; }
+elif [ -x hugo.venv/bin/python3 ]; then
+  py() { hugo.venv/bin/python3 "$@"; }
+else
+  echo "pre-commit: need either uv (https://docs.astral.sh/uv/) or a hugo.venv virtualenv" >&2
+  echo "pre-commit: quickest fix:  uv sync   (see SETUP.md)" >&2
+  exit 1
+fi
+
+# ── 1. Bibliography sync ────────────────────────────────────────────────
+if git diff --cached --name-only --diff-filter=ACMR | grep -qE '^(bibliography/.*|content/articles/.*)\.bib$'; then
+  echo "pre-commit: bibliography changed — regenerating data/references.yml"
+  if ! py scripts/bib_to_yaml.py; then
+    echo "pre-commit: bib_to_yaml.py failed" >&2
+    exit 1
+  fi
+  git add data/references.yml
+fi
+
+# ── 2. Article validation ───────────────────────────────────────────────
+staged_articles=()
+while IFS= read -r line; do
+  [ -n "$line" ] && staged_articles+=("$line")
+done < <(git diff --cached --name-only --diff-filter=ACMR -- 'content/articles/**/*.md' || true)
+
+if [ "${#staged_articles[@]}" -gt 0 ]; then
+  echo "pre-commit: validating ${#staged_articles[@]} staged article(s)"
+  if ! py scripts/check_commit.py "${staged_articles[@]}"; then
+    exit 1
+  fi
+fi

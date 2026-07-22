@@ -1,0 +1,329 @@
+/* On author pages, the top-tag chips in the stats bar drive the filter,
+   so per-card tag links would be redundant noise. */
+.author-page .article-card .post-tags { display: none; }
+
+/* ── Author affiliations (compact, under author name) ── */
+.author-affiliations {
+  font-size: 0.85em;
+  margin-top: 0.5em;
+  line-height: 1.4;
+}
+
+/* ── Superscript markers linking authors to affiliations ── */
+.post-authors sup {
+  font-size: 0.7em;
+  vertical-align: super;
+}
+
+/* ── Role badges ─────────────────────────────────────── */
+.role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  line-height: 1.6;
+
+  /* Variants on a themed background need themed text: white fails on the
+     dark-mode accent (gold) and secondary (tan) — --button-text flips to
+     near-black there. Fixed-colour variants keep white. */
+  &--founder        { background: var(--accent);    color: var(--button-text); }
+  &--researcher     { background: #3B82F6; }
+  &--practitioner   { background: #10B981; }
+  &--law\ enforcement { background: #1E3A5F; }
+  &--contributor    { background: var(--secondary); color: var(--button-text); }
+}
+
+/* ── Author page ─────────────────────────────────────── */
+.author-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .author-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    .author-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .author-info {
+      flex: 1;
+
+      .author-name-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 0.25rem;
+
+        h1 {
+          margin: 0;
+          font-size: 2rem;
+          color: var(--primary);
+        }
+      }
+
+      .affiliations {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        color: var(--secondary);
+
+        li { margin-bottom: 0.25rem; }
+      }
+
+      .links {
+        margin-top: 0.5rem;
+
+        a {
+          margin-right: 0.5rem;
+          font-size: 1.2em;
+          color: var(--secondary);
+
+          &:hover { color: var(--accent); }
+        }
+      }
+
+      .abstract {
+        margin-top: 1rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--content);
+      }
+    }
+  }
+}
+
+/* ── Author page: force 2-column article grid ────────── */
+.author-page .articles-grid {
+  grid-template-columns: repeat(2, 1fr);
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Author stats bar ────────────────────────────────── */
+.author-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2.5rem;
+  background: var(--entry);
+  border-radius: 10px;
+  border: 1px solid var(--tertiary);
+}
+
+.author-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  &__value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--secondary);
+    font-weight: 600;
+  }
+
+  &--tags {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.author-top-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.author-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--tertiary);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--secondary);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--accent);
+    color: var(--button-text);
+  }
+}
+
+.author-tag-count {
+  background: var(--secondary);
+  color: var(--entry);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0 0.35rem;
+  line-height: 1.5;
+
+  .author-tag-chip:hover & {
+    background: rgba(255,255,255,0.3);
+    color: var(--button-text);
+  }
+}
+
+/* ── Authors list card name row ──────────────────────── */
+.card-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ── Collab graph link ───────────────────────────────── */
+.collab-graph-link {
+  margin-top: 1.5rem;
+  text-align: center;
+
+  &__anchor {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    color: var(--secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--secondary);
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+}
+
+/* ── Collab graph page ───────────────────────────────── */
+.collab-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* The article-graph page reuses .collab-page; targets for its
+   own ID + the mode toggle live here so the d3 styles stay
+   colocated. */
+#article-graph {
+  width: 100%;
+  background: var(--entry);
+  border-radius: 12px;
+  border: 1px solid var(--tertiary);
+  overflow: hidden;
+  cursor: grab;
+
+  &:active { cursor: grabbing; }
+
+  svg { display: block; }
+}
+
+.article-graph-toggle {
+  display: inline-flex;
+  border: 1px solid var(--tertiary);
+  border-radius: 999px;
+  background: var(--entry);
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+  gap: 0.25rem;
+
+  &__btn {
+    border: none;
+    background: transparent;
+    padding: 0.4rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover { color: var(--primary); }
+
+    &.is-active {
+      background: var(--accent);
+      color: var(--button-text);
+    }
+  }
+}
+
+.collab-header {
+  margin-bottom: 1.5rem;
+}
+
+.collab-title {
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.collab-desc {
+  color: var(--secondary);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+#collab-graph {
+  width: 100%;
+  background: var(--entry);
+  border-radius: 12px;
+  border: 1px solid var(--tertiary);
+  overflow: hidden;
+  cursor: grab;
+
+  &:active { cursor: grabbing; }
+
+  svg { display: block; }
+}
+
+.collab-hint {
+  font-size: 0.75rem;
+  color: var(--secondary);
+  text-align: center;
+  margin-top: 0.6rem;
+  opacity: 0.7;
+}
+
+.collab-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--theme);
+  border: 1px solid var(--tertiary);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  white-space: nowrap;
+  z-index: 9999;
+}

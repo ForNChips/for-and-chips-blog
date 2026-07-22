@@ -1,0 +1,11 @@
+/* ── Secondary page titles (articles, authors, about, bags, tools) ─ */
+.articles-page h1,
+.authors-page h1,
+.about-page h1,
+.bags-page h1,
+.tools-page h1 {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 2rem;
+}

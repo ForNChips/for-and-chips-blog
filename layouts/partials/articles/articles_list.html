@@ -1,0 +1,61 @@
+{{- $pages := where site.RegularPages "Type" "article" }}
+{{- if .Data.Term }}
+  {{- $pages = .Pages }}
+{{- end }}
+
+<div id="articles-pagination-top"></div>
+
+{{- range $pages }}
+{{- $tagList := slice }}
+{{- range .Params.tags }}{{- $tagList = $tagList | append (lower .) }}{{- end }}
+<article class="post-entry"
+    data-title="{{ lower .Title }}"
+    data-abstract="{{ lower (.Description | default "") }}"
+    data-tags="{{ delimit $tagList "," }}"
+    style="display:none">
+  <div class="article-card-layout">
+
+    {{- partial "articles/article_thumb.html" (dict "page" . "maxWidth" 400) -}}
+
+    <div class="article-main">
+      <header class="entry-header">
+        <h2 class="entry-hint-parent">
+          {{ .Title }}
+          {{ if .Draft }}
+            <span class="entry-hint">Draft</span>
+          {{ end }}
+        </h2>
+      </header>
+
+      <div class="entry-content">
+        {{ with .Description }}
+          <p>{{ . | markdownify }}</p>
+        {{ end }}
+      </div>
+
+      <footer class="entry-footer">
+        <span>{{ .Date.Format "02 Jan 2006" }}</span>
+
+        {{- with .Params.authors }}
+          ·&nbsp;{{- range $i, $author := . }}
+            {{- if $i }}, {{ end -}}
+            {{- partial "authors/author_name.html" (printf "%s" (index $author "id")) }}
+          {{- end }}
+        {{- end }}
+
+        {{ with .Params.tags }}
+          <div class="post-tags">
+            {{ range . }}
+              {{ partial "tags/tag_link.html" . }}
+            {{ end }}
+          </div>
+        {{ end }}
+      </footer>
+    </div>
+  </div>
+
+  <a class="entry-link" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+
+<div id="articles-pagination-bottom"></div>

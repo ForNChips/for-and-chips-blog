@@ -1,0 +1,16 @@
+{{- with site.Params.donation -}}
+{{- if and .enabled .url -}}
+{{- $provider := .provider | default "buymeacoffee" -}}
+<div class="donation-block">
+  <a href="{{ .url }}" target="_blank" rel="noopener noreferrer"
+     class="donation-btn donation-btn--{{ $provider }}">
+    {{- if eq $provider "ko-fi" }}
+    <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="" class="donation-icon">
+    {{- else }}
+    <span class="donation-icon" aria-hidden="true">☕</span>
+    {{- end }}
+    {{ .label | default "Support our work" }}
+  </a>
+</div>
+{{- end -}}
+{{- end -}}

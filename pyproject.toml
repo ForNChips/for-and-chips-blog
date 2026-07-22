@@ -1,0 +1,9 @@
+[project]
+name = "for-and-chips-blog"
+version = "1.0.0"
+description = "Digital forensic blog"
+requires-python = ">=3.10"
+dependencies = [
+    "bibtexparser>=1.0,<2.0",
+    "pyyaml>=6.0",
+]

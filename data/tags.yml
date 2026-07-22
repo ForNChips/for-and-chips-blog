@@ -1,0 +1,33 @@
+keywords:
+  ios:
+    label: "iOS"
+  android:
+    label: "Android"
+  mobile_forensic:
+    label: "Mobile forensic"
+  car_forensic:
+    label: "Car forensic"
+  car_crash:
+    label: "Car crash"
+  location:
+    label: "Location"
+  activity:
+    label: "Activity"
+  exif:
+    label: "EXIF"
+  browser_history:
+    label: "Browser history"
+  database:
+    label: "Database"
+  logs:
+    label: "Logs"
+  protobuf:
+    label: "Protobuf"
+  standard:
+    label: "Standard"
+  malware:
+    label: "Malware"
+  forensic:
+    label: "Forensic"
+  cryptography:
+    label: "Cryptography"

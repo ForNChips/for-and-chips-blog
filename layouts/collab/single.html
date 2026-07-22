@@ -1,0 +1,49 @@
+{{- define "main" }}
+
+{{/* Build graph data from authors + posts */}}
+{{- $nodes := slice -}}
+{{- range $id, $author := hugo.Data.authors -}}
+  {{- $count := 0 -}}
+  {{- range where site.RegularPages "Type" "article" -}}
+    {{- range .Params.authors -}}
+      {{- if eq .id $id -}}{{- $count = add $count 1 -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $nodes = $nodes | append (dict "id" $id "name" (printf "%s %s" $author.first_name $author.last_name) "role" ($author.role | default "Contributor") "count" $count) -}}
+{{- end -}}
+
+{{- $links := slice -}}
+{{- range where site.RegularPages "Type" "article" -}}
+  {{- $postAuthors := slice -}}
+  {{- range .Params.authors -}}
+    {{- $postAuthors = $postAuthors | append .id -}}
+  {{- end -}}
+  {{- range $i, $a := $postAuthors -}}
+    {{- range $j, $b := $postAuthors -}}
+      {{- if lt $i $j -}}
+        {{- $links = $links | append (dict "source" $a "target" $b) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<div class="collab-page">
+  <header class="collab-header">
+    <h1 class="collab-title">Collaboration Graph</h1>
+    <p class="collab-desc">Co-authorship network — node size reflects article count, edges connect co-authors. Drag nodes to explore.</p>
+  </header>
+  <div id="collab-graph" aria-label="Author collaboration network graph"></div>
+  <p class="collab-hint">Scroll to zoom · drag to pan · drag nodes to rearrange</p>
+</div>
+
+<script type="application/json" id="collab-graph-data">{{ dict "nodes" $nodes "links" $links | jsonify | safeJS }}</script>
+{{- /* d3 is vendored (assets/js/d3.v7.9.0.min.js) so no CDN request is made
+       and the CSP in static/_headers can stay third-party-free. */}}
+{{- $d3 := resources.Get "js/d3.v7.9.0.min.js" | fingerprint }}
+<script src="{{ $d3.RelPermalink }}" integrity="{{ $d3.Data.Integrity }}"></script>
+{{- $forceGraph := resources.Get "js/extended/force-graph.js" }}
+<script src="{{ $forceGraph.RelPermalink }}"></script>
+{{- $collabGraph := resources.Get "js/extended/collab-graph.js" }}
+<script src="{{ $collabGraph.RelPermalink }}"></script>
+
+{{- end }}

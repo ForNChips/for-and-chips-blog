@@ -1,0 +1,132 @@
+/* ============================================================
+   Home page layout
+   ============================================================ */
+
+.home {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+/* ── Hero / Intro ────────────────────────────────────────── */
+.home-hero {
+  text-align: center;
+  
+}
+
+.home-banner {
+  width: 100%;
+  height: auto;        /* ← adapte la hauteur au contenu */
+  display: block;
+}
+
+.home-intro-block {
+  max-width: 90%;
+  margin: 0 auto 4rem;
+  
+  .home-intro-lead {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.8;
+    color: var(--content);
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto 2.5rem;
+  }
+
+  .home-intro-concepts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 0 auto 2rem;
+    max-width: 90%;    /* ← même que .home-intro-lead */
+  }
+
+  .home-intro-card {
+    background-color: var(--reverse-bg);
+    border-radius: 14px;
+    padding: 1.5rem;
+    
+    .home-intro-card-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--reverse-text);
+      margin: 0;
+    }
+  }
+
+  .home-intro-closing {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.home-title-arc {
+  font-size: 1.5em;
+  font-weight: 700;
+  fill: var(--accent);
+}
+
+.home-tagline-svg {
+  font-size: 1rem;
+  font-weight: 700;
+  fill: var(--text);
+}
+
+
+
+.home-intro {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--content);
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+}
+
+.home-links {
+  margin-top: 1rem;
+
+  .hero-link {
+    display: inline-block;
+    margin: 0 0.7rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease;
+
+    &:hover {
+      filter: brightness(0.85);
+    }
+  }
+}
+
+/* ── Latest articles section spacing ─────────────────────── */
+.home-latest {
+  margin-top: 2rem;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .home {
+    padding: 2rem 1rem;
+  }
+
+  .home-hero {
+    padding: 2rem 1rem;
+  }
+}

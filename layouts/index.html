@@ -1,0 +1,65 @@
+{{ define "main" }}
+<main class="home">
+<div class="home-hero">
+
+<svg class="home-title-arc" width="100%" viewBox="0 30 500 110" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- id="arc": reference name for textPath -->
+    <!-- M 50,180: start point | A 200,120: horizontal,vertical radii -->
+    <!-- 450,180: end point -->
+    <path id="arc" d="M 50,180 A 200,120 0 0,1 450,180"/>
+  </defs>
+
+  <!-- startOffset="50%" + text-anchor="middle": centres the text on the arc -->
+  <text>
+    <textPath href="#arc" startOffset="50%" text-anchor="middle">
+      Welcome to Crispy Crime City
+    </textPath>
+  </text>
+
+  <!-- x="250": horizontally centred | y="115": vertical position of the tagline -->
+  <text x="250" y="115" text-anchor="middle" class="home-tagline-svg">
+    Let's follow the crumbs...
+  </text>
+</svg>
+
+{{- /* Source is a 9569×3295 raw PNG (~26 MB) — never ship it as-is.
+       Resized WebP variants; browsers pick per viewport/DPR via srcset. */}}
+{{- $raw := resources.Get "images/homepage/banner.png" }}
+{{- $w1 := $raw.Resize "960x webp q85" }}
+{{- $w2 := $raw.Resize "1920x webp q85" }}
+{{- $w3 := $raw.Resize "2880x webp q80" }}
+<img class="home-banner" src="{{ $w2.RelPermalink }}"
+     srcset="{{ $w1.RelPermalink }} 960w, {{ $w2.RelPermalink }} 1920w, {{ $w3.RelPermalink }} 2880w"
+     sizes="(max-width: 900px) 100vw, 85vw"
+     width="{{ $w2.Width }}" height="{{ $w2.Height }}"
+     alt="Crispy Crime City" loading="eager" decoding="async">
+</div>
+
+
+<div class="home-intro-block">
+  <p class="home-intro-lead">For&amp;Chips is a community-driven digital forensics blog, a place where every chip brings its own piece to the edifice. On our own, we each spot a crumb here and there. 
+    <br>But by sharing our findings, tools, and techniques, we piece the whole picture together and go further than any of us could alone.</p>
+ <p class="home-intro-closing">Welcome to Crispy Crime City. Let's follow the crumbs, together.</p>
+  <div class="home-intro-concepts">
+    <div class="home-intro-card">
+      <p class="home-intro-card-title">🥔 Flavours</p>
+      <p>Our article themes: iOS, Android, location, and more. Each flavour gathers the knowledge around one corner of the field, so you always know which crumb trail you're following.</p>
+    </div>
+    <div class="home-intro-card">
+      <p class="home-intro-card-title">🍟 Bags</p>
+      <p>Where the chips gather. Each one forms around a real-world use case, bringing several articles together into a single pack, so all the crumbs on that subject sit side by side.</p>
+    </div>
+  </div>
+</div>
+
+
+<section class="home-latest">
+  <header class="section-header">
+    <h2>Latest articles</h2>
+    <a href="/articles/" class="section-link">View all →</a>
+  </header>
+  {{ partial "home/post_list_homepage.html" }}
+</section>
+</main>
+{{ end }}

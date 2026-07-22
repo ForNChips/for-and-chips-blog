@@ -1,0 +1,103 @@
+{{- define "main" }}
+
+{{/* ─────────────────────────────────────────────────────────────
+     Article graph
+     ─────────────────────────────────────────────────────────────
+     Nodes = published articles.
+     Two edge sets, switchable in the UI:
+       refs : article A links to article B via {{< ref "articles/..." >}}
+       tags : articles share ≥1 tag (edge weight = number of shared tags)
+*/}}
+
+{{- $articles := where site.RegularPages "Type" "article" -}}
+
+{{/* Build node list. */}}
+{{- $nodes := slice -}}
+{{- range $articles -}}
+  {{- $tagList := slice -}}
+  {{- range .Params.tags -}}{{ $tagList = $tagList | append (lower .) }}{{- end -}}
+  {{- $authorNames := slice -}}
+  {{- range .Params.authors -}}
+    {{- $authorNames = $authorNames | append (partial "authors/author_name.html" (printf "%s" (index . "id"))) -}}
+  {{- end -}}
+  {{- $nodes = $nodes | append (dict
+    "id"      .RelPermalink
+    "title"   .Title
+    "url"     .RelPermalink
+    "tags"    $tagList
+    "authors" $authorNames
+    "date"    (.Date.Format "02 Jan 2006")
+  ) -}}
+{{- end -}}
+
+{{/* Cross-reference edges — parse `{{< ref "articles/..." >}}` from each
+    article's raw content. We keep the regex permissive (accepts ref and
+    relref) and resolve the target via site.GetPage. */}}
+{{- $refLinks := slice -}}
+{{- range $articles -}}
+  {{- $source := .RelPermalink -}}
+  {{- $matches := findRE `\{\{<\s*(?:ref|relref)\s+"[^"]+"` .RawContent -}}
+  {{- range $matches -}}
+    {{- $path := replaceRE `^.*"([^"]+)".*$` "$1" . -}}
+    {{- $target := site.GetPage $path -}}
+    {{- if and $target (ne $target.RelPermalink $source) -}}
+      {{- $refLinks = $refLinks | append (dict "source" $source "target" $target.RelPermalink) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* Shared-tag edges — pairwise. */}}
+{{- $tagLinks := slice -}}
+{{- range $i, $a := $articles -}}
+  {{- $aTags := slice -}}
+  {{- range $a.Params.tags -}}{{ $aTags = $aTags | append (lower .) }}{{- end -}}
+  {{- range $j, $b := $articles -}}
+    {{- if lt $i $j -}}
+      {{- $bTags := slice -}}
+      {{- range $b.Params.tags -}}{{ $bTags = $bTags | append (lower .) }}{{- end -}}
+      {{- $shared := intersect $aTags $bTags -}}
+      {{- if gt (len $shared) 0 -}}
+        {{- $tagLinks = $tagLinks | append (dict
+          "source" $a.RelPermalink
+          "target" $b.RelPermalink
+          "value"  (len $shared)
+        ) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<div class="collab-page article-graph-page">
+  <header class="collab-header">
+    <h1 class="collab-title">{{ .Title }}</h1>
+    <p class="collab-desc">
+      {{ len $nodes }} article{{ if ne (len $nodes) 1 }}s{{ end }}.
+      Switch between two views: <strong>cross-references</strong> ({{ len $refLinks }} link{{ if ne (len $refLinks) 1 }}s{{ end }}
+      from <code>&#123;&#123;&lt; ref &gt;&#125;&#125;</code> shortcodes)
+      or <strong>shared tags</strong> ({{ len $tagLinks }} pair{{ if ne (len $tagLinks) 1 }}s{{ end }} of articles
+      with ≥1 tag in common; edge thickness = number of shared tags).
+    </p>
+  </header>
+
+  <div class="article-graph-toggle" role="tablist" aria-label="Edge mode">
+    <button type="button" class="article-graph-toggle__btn is-active" data-mode="refs"
+            role="tab" aria-selected="true">Cross-references</button>
+    <button type="button" class="article-graph-toggle__btn" data-mode="tags"
+            role="tab" aria-selected="false">Shared tags</button>
+  </div>
+
+  <div id="article-graph" aria-label="Article relationship graph"></div>
+  <p class="collab-hint">Scroll to zoom · drag to pan · drag nodes to rearrange · click a node to open the article</p>
+</div>
+
+<script type="application/json" id="article-graph-data">{{ dict "nodes" $nodes "refLinks" $refLinks "tagLinks" $tagLinks | jsonify | safeJS }}</script>
+{{- /* d3 is vendored (assets/js/d3.v7.9.0.min.js) so no CDN request is made
+       and the CSP in static/_headers can stay third-party-free. */}}
+{{- $d3 := resources.Get "js/d3.v7.9.0.min.js" | fingerprint }}
+<script src="{{ $d3.RelPermalink }}" integrity="{{ $d3.Data.Integrity }}"></script>
+{{- $forceGraph := resources.Get "js/extended/force-graph.js" }}
+<script src="{{ $forceGraph.RelPermalink }}"></script>
+{{- $articleGraph := resources.Get "js/extended/article-graph.js" }}
+<script src="{{ $articleGraph.RelPermalink }}"></script>
+
+{{- end }}

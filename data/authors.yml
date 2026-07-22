@@ -1,0 +1,6 @@
+# Author registry — one entry per author, keyed by a kebab-case id that
+# articles reference in their frontmatter (`authors: [{id: "jane-doe"}]`).
+# See doc/writing-articles.md §3 for the full schema.
+#
+# Empty on the public production branch: authors are added as they publish.
+{}

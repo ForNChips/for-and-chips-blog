@@ -1,0 +1,74 @@
+{{ define "main" }}
+
+{{/* ─────────────────────────────────────────────────────────────
+     /tools/ — index of all tools, rendered as the same card grid
+     as the homepage articles (articles-grid / article-card classes
+     from cards.scss). Filtering is client-side: tools-filter.js
+     wires TagFilter over the data-* attributes emitted below.
+
+     Tools share the article tag vocabulary (data/tags.yml labels
+     and tags.scss colours) but filtering stays per-section: the
+     flavours box below aggregates tags from tool pages only, and
+     badges link to /tools/?tag=… . The /articles/ pill cloud is
+     unaffected — it aggregates from Type == "article" pages only.
+     The global navbar search (index.json, Section == "articles")
+     never indexes tools either way.
+     ───────────────────────────────────────────────────────────── */}}
+
+<div class="tools-page">
+
+  <h1>{{ .Title }}</h1>
+
+  {{- if .Content }}
+  <div class="tools-intro">{{ .Content }}</div>
+  {{- end }}
+
+  {{ partial "search_bar.html" (dict "placeholder" "Search tools") }}
+
+  {{- $tools := .Pages.ByTitle -}}
+
+  {{ partial "flavours_box.html" (dict
+       "pages"   $tools
+       "cloudId" "tools-tag-cloud") }}
+
+  <div class="articles-grid" id="tools-grid">
+    {{- range $tools }}
+      {{- $tagList := slice -}}
+      {{- range .Params.tags -}}{{- $tagList = $tagList | append (lower .) -}}{{- end -}}
+    <article class="article-card"
+        data-tags="{{ delimit $tagList "," }}"
+        data-title="{{ lower .Title }}"
+        data-description="{{ lower (.Description | default "") }}">
+      <a href="{{ .RelPermalink }}" class="article-card-link">
+        {{- partial "articles/article_thumb.html" (dict "page" . "maxWidth" 800) -}}
+        <h3 class="post-title">
+          {{ .Title }}
+          {{- if .Draft }} <span class="entry-hint">Draft</span>{{ end }}
+        </h3>
+      </a>
+      <div class="article-card-footer">
+        {{- $cat := .Params.category }}
+        <div class="article-meta-line">
+          {{- with $cat }}<span>{{ . }}</span>{{ end }}
+          {{- with .Params.platforms }}
+            {{- if $cat }}<span aria-hidden="true">·</span>{{ end }}
+          <span>{{ delimit . ", " }}</span>
+          {{- end }}
+        </div>
+        {{- with $tagList }}
+        <div class="post-tags">
+          {{- range . }}
+          {{/* Same badge as articles (label + per-tag colour) but the link
+               filters /tools/, not /articles/. */}}
+          <a href="/tools/?tag={{ . }}" class="tag" data-tag="{{ . }}">{{ partial "tags/tag_label.html" . }}</a>
+          {{- end }}
+        </div>
+        {{- end }}
+      </div>
+    </article>
+    {{- end }}
+  </div>
+
+</div>
+
+{{ end }}

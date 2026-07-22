@@ -1,0 +1,24 @@
+{{/* Article cover thumbnail with a tag-labelled placeholder fallback.
+     Shared by the grid cards (cards.html) and the list rows (articles_list.html)
+     so the cover/placeholder markup stays identical in both.
+     Params (dict):
+       page     — the article page (required)
+       maxWidth — thumbnail width passed to helpers/thumb.html (default 800) */}}
+{{- $page     := .page -}}
+{{- $maxWidth := .maxWidth | default 800 -}}
+{{- $imgRaw   := $page.Resources.GetMatch "images/cover.*" -}}
+{{- $firstTag := "" -}}
+{{- with $page.Params.tags -}}{{- $firstTag = index . 0 -}}{{- end -}}
+{{- if $imgRaw -}}
+{{- $thumb := partial "helpers/thumb.html" (dict "img" $imgRaw "maxWidth" $maxWidth) -}}
+<div class="article-thumb">
+  <img src="{{ $thumb.RelPermalink }}"
+       alt="{{ $page.Title }}"
+       width="{{ $thumb.Width }}" height="{{ $thumb.Height }}"
+       loading="lazy" decoding="async">
+</div>
+{{- else -}}
+<div class="article-thumb article-thumb--placeholder">
+  {{- if $firstTag -}}<span class="placeholder-tag">{{ $firstTag }}</span>{{- end -}}
+</div>
+{{- end -}}
