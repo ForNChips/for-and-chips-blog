@@ -7,3 +7,11 @@ dependencies = [
     "bibtexparser>=1.0,<2.0",
     "pyyaml>=6.0",
 ]
+
+# This project ships no importable Python package — pyproject.toml exists only
+# to pin the dependencies of the helper scripts in scripts/. Without this,
+# setuptools' flat-layout auto-discovery treats the Hugo directories (content/,
+# layouts/, static/, …) as packages and aborts, which breaks any `pip install .`
+# (Cloudflare Pages runs exactly that when it detects this file).
+[tool.setuptools]
+py-modules = []
