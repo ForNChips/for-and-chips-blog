@@ -104,6 +104,7 @@ h1.post-title {
 .article-section {
   position: relative;
   background-color: var(--reverse-bg);
+  border: 1px solid var(--tertiary);
   border-radius: 10px;
   padding: 1.2rem 1.5rem;
   margin: 2rem 0 2.5rem 0;
@@ -130,9 +131,9 @@ h1.post-title {
   line-height: 1.7;
 }
 
-/* Abstract section (grey border) */
+/* Abstract section (neutral border, vs the accent bar on Path) */
 .article-description {
-  border-left: 8px solid #8c8c8c;
+  border-left: 8px solid var(--secondary);
 
   .article-section-title {
     color: var(--reverse-text);
@@ -151,7 +152,8 @@ h1.post-title {
 .post-description {
   position: relative;
   background-color: var(--reverse-bg);
-  border-left: 8px solid #8c8c8c;
+  border: 1px solid var(--tertiary);
+  border-left: 8px solid var(--accent);
   border-radius: 10px 10px 10px 10px;
   padding: 1.2rem 1.5rem;
   margin: 1.5rem 0 2rem 0;
@@ -172,9 +174,8 @@ h1.post-title {
     margin-bottom: 0.5rem;
   }
 
-  /* Inline code inherits `code { color: var(--accent) }`, but this box keeps
-     a light bg in dark mode where the gold accent is illegible — use the
-     always-dark reverse accent instead. */
+  /* --reverse-accent now tracks --accent (the panel follows the theme), so
+     this simply keeps the accent colour explicit for inline code. */
   code {
     color: var(--reverse-accent);
   }
@@ -249,12 +250,11 @@ font-family: "Avenir";
 
 .source-paths {
   background-color: var(--reverse-bg);
+  border: 1px solid var(--tertiary);
   color: var(--reverse-text);
   padding: 0.8rem 1rem;
   margin: 1.5rem 0 2rem 0;
   font-size: 0.85rem;
-  /* Reverse accent, not --accent: this box stays light in dark mode,
-     where the gold accent would wash out (see vars.scss). */
   border-left: 8px solid var(--reverse-accent);
   border-radius: 10px;
 

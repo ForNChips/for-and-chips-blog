@@ -46,6 +46,9 @@
 
   .home-intro-card {
     background-color: var(--reverse-bg);
+    border: 1px solid var(--tertiary);
+    /* Accent bar as on .citation-block and the article Abstract/Path panels. */
+    border-left: 4px solid var(--accent);
     border-radius: 14px;
     padding: 1.5rem;
     

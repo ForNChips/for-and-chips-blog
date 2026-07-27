@@ -29,6 +29,10 @@
   display: flex;
   gap: 1.25rem;
   flex-wrap: wrap;
+  /* Centring makes a wrapped row read as deliberate instead of leaving the
+     last item ("About") orphaned on the left. */
+  justify-content: center;
+  row-gap: 0.5rem;
 }
 
 .footer-rss {
