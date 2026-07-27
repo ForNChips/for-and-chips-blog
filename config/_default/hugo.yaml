@@ -42,6 +42,12 @@ params:
   cover:
     responsiveImages: true
 
+  # Fallback social-share image (OpenGraph / X cards) for any page without its
+  # own cover — the homepage, list pages and coverless articles. Path is
+  # relative to assets/; it is cropped to 1200x630 at build time.
+  # Without this, LinkedIn and X render a blank preview card.
+  defaultSocialImage: "images/homepage/banner.png"
+
   authors:
     showCollabGraph: true
 

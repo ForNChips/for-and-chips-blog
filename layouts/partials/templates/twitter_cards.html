@@ -1,0 +1,55 @@
+{{- /*
+  Overrides PaperMod's twitter_cards.html.
+
+  Two fixes over upstream:
+    1. It only looked at .Params.cover.image, so our page-bundle covers
+       (images/cover.*) never produced a large card.
+    2. With no image it emitted card=summary and no image at all; now it falls
+       back to params.defaultSocialImage, matching templates/opengraph.html.
+*/ -}}
+{{- $img := "" -}}
+{{- $coverImg := .Resources.GetMatch "images/cover.*" -}}
+{{- if $coverImg -}}
+  {{- $img = $coverImg.Permalink -}}
+{{- else if .Params.cover.image -}}
+  {{- if (ne .Params.cover.relative true) -}}
+    {{- $img = .Params.cover.image | absURL -}}
+  {{- else -}}
+    {{- $img = (path.Join .RelPermalink .Params.cover.image) | absURL -}}
+  {{- end -}}
+{{- else -}}
+  {{- with partial "_funcs/get-page-images" . -}}
+    {{- with index . 0 -}}{{- $img = .Permalink -}}{{- end -}}
+  {{- else -}}
+    {{- with resources.Get site.Params.defaultSocialImage -}}
+      {{- $img = (.Fill "1200x630 jpg q85").Permalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end }}
+
+{{- with $img }}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ . }}">
+{{- else }}
+<meta name="twitter:card" content="summary">
+{{- end }}
+
+{{- with or .Title site.Title site.Params.title | plainify }}
+  <meta name="twitter:title" content="{{ . }}">
+{{- end }}
+
+{{- with or .Description .Summary site.Params.description | plainify | htmlUnescape }}
+  <meta name="twitter:description" content="{{ trim . "\n\r\t " }}">
+{{- end }}
+
+{{- with site.Params.social }}
+  {{- if reflect.IsMap . }}
+    {{- with .twitter }}
+      {{- $content := . }}
+      {{- if not (strings.HasPrefix . "@") }}
+        {{- $content = printf "@%v" . }}
+      {{- end }}
+      <meta name="twitter:site" content="{{ $content }}">
+    {{- end }}
+  {{- end }}
+{{- end }}

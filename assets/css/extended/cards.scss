@@ -49,6 +49,34 @@
     box-shadow: var(--shadow-lg-hover);
   }
 
+  /* Content-type badge — grids can mix articles and tools ("See also"), so
+     the type is stated and colour-coded. z-index keeps it above the
+     stretched-link ::after overlay. */
+  .card-type {
+    position: absolute;
+    top: 1.9rem;
+    left: 1.9rem;
+    z-index: 1;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  &--article .card-type {
+    background: var(--tertiary);
+    color: var(--primary);
+    border: 1px solid var(--border);
+  }
+
+  &--tool .card-type {
+    background: var(--accent);
+    color: var(--button-text);
+  }
+
   /* Stretched link covers the whole card via ::after overlay */
   .article-card-link {
     flex: 1;
