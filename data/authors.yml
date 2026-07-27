@@ -1,6 +1,57 @@
-# Author registry — one entry per author, keyed by a kebab-case id that
-# articles reference in their frontmatter (`authors: [{id: "jane-doe"}]`).
-# See doc/writing-articles.md §3 for the full schema.
-#
-# Empty on the public production branch: authors are added as they publish.
-{}
+alice-dupont:
+  first_name: "Alice"
+  last_name: "Dupont"
+  role: "Researcher"
+  description: "Chercheuse en cybersécurité, spécialisée dans l'analyse de malwares."
+  photo: "alice.png"
+  links:
+    website: "https://alice.example.com"
+    linkedin: "https://linkedin.com/in/alice"
+    orcid: "0000-0001-2345-6789"
+    github: ""
+  current_affiliations:
+    "Université X": "Professeure"
+    "Laboratoire Z": "Chercheuse"
+  keywords:
+    - "protobuf"
+    - "database"
+    - "Android"
+
+bernard-martin:
+  first_name: "Bernard"
+  last_name: "Martin"
+  role: "Practitioner"
+  description: "Expert en forensique numérique et sécurité des systèmes embarqués."
+  photo: ""
+  links:
+    website: "https://bernard.example.com"
+    linkedin: "https://linkedin.com/in/bernard"
+    orcid: "0000-0001-2345-6789"
+    github: "alicegit"
+  current_affiliations:
+    "Institut Y": "Chercheur principal"
+  keywords:
+    - "car_forensic"
+    - "mobile_forensic"
+    - "activity"
+    - "browser_history"
+
+claire-lefevre:
+  first_name: "Claire"
+  last_name: "Lefebvre"
+  role: "Researcher"
+  description: "Analyste de données et chercheuse en cryptographie appliquée."
+  photo: "claire.png"
+  links:
+    website: "https://claire.example.com"
+    linkedin: "https://linkedin.com/in/claire"
+    orcid: "0000-0001-2345-6789"
+    github: "alicegit"
+  current_affiliations:
+    "Université Z": "Professeure associée"
+    "Centre de Recherche ABC": "Chercheuse"
+  keywords:
+    - "iOS"
+    - "exif"
+    - "logs"
+    - "Digital"

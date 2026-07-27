@@ -1,3 +1,27 @@
-# Auto-generated from per-article references.bib by scripts/bib_to_yaml.py.
-# Empty until a published article cites a reference.
-{}
+crunchy_placeholder_2026:
+  sources:
+  - content/articles/2026-07-01-demo-citations/references.bib
+  type: article
+  authors: Crunchy, C.; Salty, S.
+  title: A placeholder study of crisp persistence in mobile databases
+  journal: Journal of Dummy Data
+  volume: '12'
+  number: '3'
+  pages: 1-18
+  year: 2026
+chips_field_2025:
+  sources:
+  - content/articles/2026-07-01-demo-citations/references.bib
+  type: book
+  authors: Chips, C.
+  title: Field Guide to Fictional Forensics
+  journal: Crispville Press
+  year: 2025
+potato_dataset_2024:
+  sources:
+  - content/articles/2026-07-01-demo-citations/references.bib
+  type: misc
+  authors: Potato, P.
+  title: The Great Imaginary Crumb Dataset
+  year: 2024
+  url: https://example.com/crumb-dataset
