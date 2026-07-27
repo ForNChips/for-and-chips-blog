@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+for_and_chips_blog.egg-info/PKG-INFO
+for_and_chips_blog.egg-info/SOURCES.txt
+for_and_chips_blog.egg-info/dependency_links.txt
+for_and_chips_blog.egg-info/requires.txt
+for_and_chips_blog.egg-info/top_level.txt
