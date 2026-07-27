@@ -44,6 +44,6 @@
             } catch { ok = false; }
         }
         if (!ok) ok = legacyCopy(url);
-        flash(ok ? 'Link copied!' : 'Press Ctrl+C to copy');
+        flash(ok ? 'Link copied!' : 'Copy failed');
     });
 })();
