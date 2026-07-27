@@ -36,7 +36,9 @@
 
   .home-intro-concepts {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* auto-fit collapses to a single column as soon as two 240px cards no
+       longer fit (~560px viewport), instead of squeezing them to ~100px. */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin: 0 auto 2rem;
     max-width: 90%;    /* ← même que .home-intro-lead */
@@ -126,7 +128,24 @@
     padding: 2rem 1rem;
   }
 
+  /* No padding of its own: .home already provides it, and doubling it pushed
+     the arc title ~64px down the page on phones. */
   .home-hero {
-    padding: 2rem 1rem;
+    padding: 0;
+  }
+
+  .home-intro-block {
+    max-width: 100%;
+    margin-bottom: 2.5rem;
+
+    .home-intro-lead {
+      max-width: 100%;
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+  }
+
+  .home-intro-concepts {
+    max-width: 100%;
   }
 }
