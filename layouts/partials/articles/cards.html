@@ -50,16 +50,24 @@
   {{- range $display -}}
     {{- $tagList := slice -}}
     {{- range .Params.tags -}}{{- $tagList = $tagList | append (lower .) -}}{{- end -}}
-  <article class="article-card"{{ if or $paginate $filter }} data-tags="{{ delimit $tagList "," }}" style="display:none"{{ end }}>
+  {{- /* Grids can mix content types (the "See also" block pulls related
+         articles *and* tools), so each card is labelled and colour-coded. */ -}}
+  {{- $isTool := eq .Type "tool" -}}
+  <article class="article-card article-card--{{ .Type }}"{{ if or $paginate $filter }} data-tags="{{ delimit $tagList "," }}" style="display:none"{{ end }}>
     <a href="{{ .RelPermalink }}" class="article-card-link">
       {{- partial "articles/article_thumb.html" (dict "page" . "maxWidth" 800) -}}
+      <span class="card-type">{{ if $isTool }}Tool{{ else }}Article{{ end }}</span>
       <h3 class="post-title">{{ .Title }}</h3>
     </a>
     <div class="article-card-footer">
       <div class="article-meta-line">
         <span>{{ .Date.Format "02 Jan 2006" }}</span>
         <span aria-hidden="true">·</span>
+        {{- if $isTool }}
+        <span>{{ with .Params.category }}{{ . }}{{ else }}Tool{{ end }}</span>
+        {{- else }}
         <span>{{ .ReadingTime }} min read</span>
+        {{- end }}
       </div>
       {{ with .Params.tags -}}
       <div class="post-tags">
