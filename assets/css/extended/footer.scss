@@ -39,3 +39,14 @@
   display: flex;
   align-items: center;
 }
+
+/* Below the nav breakpoint the three footer blocks no longer fit on one row.
+   Stack them centred rather than letting `space-between` strand the copyright
+   on the left while the wrapped nav centres itself underneath. */
+@media (max-width: 1000px) {
+  .footer-inner {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+}
