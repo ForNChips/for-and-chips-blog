@@ -83,13 +83,10 @@ h1.post-title {
   @media print { display: none !important; }
 }
 
-/* Reserve the width of the longest state ("Link copied!") so the pill does not
-   resize mid-interaction; centring keeps the padding even in both states. */
-.copy-link-btn__label {
-  display: inline-block;
-  min-width: 6.2em;
-  text-align: center;
-}
+/* No reserved width: the pill is sized by its content so its padding stays
+   symmetric and it matches the neighbouring "Export PDF" button. The label
+   briefly widens while it reads "Link copied!", which is preferable to a
+   permanently oversized pill. */
 
 /* ── Reading progress bar ────────────────────────────── */
 #reading-progress {
