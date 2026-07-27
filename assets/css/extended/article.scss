@@ -83,11 +83,12 @@ h1.post-title {
   @media print { display: none !important; }
 }
 
-/* Keep the button from resizing while the label flips to "Link copied!" */
+/* Reserve the width of the longest state ("Link copied!") so the pill does not
+   resize mid-interaction; centring keeps the padding even in both states. */
 .copy-link-btn__label {
   display: inline-block;
   min-width: 6.2em;
-  text-align: left;
+  text-align: center;
 }
 
 /* ── Reading progress bar ────────────────────────────── */
