@@ -27,7 +27,7 @@ Create **two Pages projects** from the same GitHub repo:
 ### 1. `forandchips` (production)
 - Production branch: `main`
 - Build command: `hugo --minify && npx pagefind --site public`
-- Build output directory: `public` (also declared in `wrangler.toml`)
+- Build output directory: `public`
 - Environment variables:
   - `HUGO_VERSION` = `0.161.0` (keep in sync with local; Extended is default on Pages)
 - Custom domain: `forandchips.com`
@@ -44,8 +44,10 @@ Notes:
   the build fails with "theme not found", add `git submodule update --init
   --recursive &&` in front of the build command.
 - `static/_headers` and `static/_redirects` are picked up by Pages as-is.
-- `wrangler.toml` only carries `name` + `pages_build_output_dir`; Pages ignores
-  build commands in that file, so they live in the dashboard.
+- There is deliberately **no `wrangler.toml`**: two Pages projects are built
+  from this one repo, and that file's `name` field pins a single project name.
+  All build settings live in the dashboard instead. `functions/`,
+  `static/_headers` and `static/_redirects` are auto-detected by Pages.
 
 ## Third-party services
 
