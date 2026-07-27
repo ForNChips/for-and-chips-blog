@@ -19,20 +19,26 @@ params:
   ShowCodeCopyButtons: true
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowShareButtons: true
+  ShowShareButtons: false
   hideFooter: false
   disableScrollToTop: false
   DateFormat: :date_long
   label:
+    # title/subtitle are rendered by layouts/partials/header.html.
+    # No `icon:` here — our header inlines the logo via partials/logo.html,
+    # so PaperMod's icon lookup is never used.
     title: "For&Chips"
     subtitle: "digital forensic"
-    icon: /logo_4nchips.svg
+  # Served from static/, so the paths keep their "logos/" prefix.
+  # safari_pinned_tab must be set: PaperMod emits <link rel="mask-icon">
+  # unconditionally and falls back to a non-existent /safari-pinned-tab.svg.
+  # There is no dedicated monochrome pinned-tab icon, so it reuses the logo.
   assets:
-    favicon: "/favicon.ico"
-    favicon16x16: "/favicons/favicon-16x16.png"
-    favicon32x32: "/favicons/favicon-32x32.png"
-    apple_touch_icon: "/favicons/apple-touch-icon.png"
-    safari_pinned_tab: "/favicons/safari-pinned-tab.svg"
+    favicon: "/logos/favicons/favicon.ico"
+    favicon16x16: "/logos/favicons/favicon-16x16.png"
+    favicon32x32: "/logos/favicons/favicon-32x32.png"
+    apple_touch_icon: "/logos/favicons/apple-touch-icon.png"
+    safari_pinned_tab: "/logos/site-logo/logo_4nchips.svg"
   cover:
     responsiveImages: true
 
