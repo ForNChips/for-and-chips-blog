@@ -5,8 +5,8 @@ Environments are driven by Hugo's config overlays:
 
 | Environment | Build command | Config merged | Robots |
 |---|---|---|---|
-| production | `hugo --minify && npx pagefind --site public` | `config/_default` + `config/production` | index, follow + sitemap |
-| demo | `hugo --minify --environment demo && npx pagefind --site public` | `config/_default` + `config/demo` | noindex meta + `Disallow: /` |
+| production | `hugo --minify && npx pagefind@1 --site public` | `config/_default` + `config/production` | index, follow + sitemap |
+| demo | `hugo --minify --environment demo && npx pagefind@1 --site public` | `config/_default` + `config/demo` | noindex meta + `Disallow: /` |
 | development | `hugo server -D` | `config/_default` | noindex meta |
 
 The `pagefind` step builds the full-text search index (`public/pagefind/`)
@@ -26,7 +26,7 @@ Create **two Pages projects** from the same GitHub repo:
 
 ### 1. `forandchips` (production)
 - Production branch: `main`
-- Build command: `hugo --minify && npx pagefind --site public`
+- Build command: `hugo --minify && npx pagefind@1 --site public`
 - Build output directory: `public`
 - Environment variables:
   - `HUGO_VERSION` = `0.161.0` (keep in sync with local; Extended is default on Pages)
@@ -34,7 +34,7 @@ Create **two Pages projects** from the same GitHub repo:
 
 ### 2. `forandchips-demo`
 - Production branch: `demo`
-- Build command: `hugo --minify --environment demo && npx pagefind --site public`
+- Build command: `hugo --minify --environment demo && npx pagefind@1 --site public`
 - Build output directory: `public`
 - Environment variables: `HUGO_VERSION` = `0.161.0`
 - Custom domain: `demo.forandchips.com`
