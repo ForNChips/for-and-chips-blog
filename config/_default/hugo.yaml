@@ -11,7 +11,8 @@ params:
   # emit <meta name="robots" content="noindex, nofollow">.
   env: development
   author: "Some of the crunchiest chips"
-  description: "Personal blog shared"
+  # SEO meta description + RSS channel description. Keep it one sentence.
+  description: "A community-driven digital forensics blog. Follow the crumbs with us."
   defaultTheme: "dark"
   ShowReadingTime: true
   ShowToc: true
