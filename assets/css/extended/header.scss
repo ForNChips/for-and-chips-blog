@@ -357,9 +357,13 @@ body.nav-dropdown-open {
     .nav-branding__flag     { height: 1rem; }
 }
 
-/* ─── Tablet (≤ 800px): hamburger + search bar ─────────── */
+/* ─── Tablet (≤ 1000px): hamburger + search bar ─────────
+   The six menu items need ~380px on their own; with the branding and the
+   search bar the row runs out of space around 900px on macOS (Avenir is
+   wider than the fallback fonts), so the items wrapped mid-word. Switch to
+   the hamburger early rather than let the bar break. */
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
     #menu { display: none; }
     .nav-hamburger { display: flex; }
 }

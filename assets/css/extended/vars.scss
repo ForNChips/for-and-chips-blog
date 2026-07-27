@@ -65,12 +65,13 @@
     --text-muted: #888880;
     --button-text: #ffffff;
     --logo-white:  #1A1204;           /* logo white areas → dark in light mode */
-    --reverse-bg:   #FFFFFF;        /* light box bg (abstract, source-path) */
-    --reverse-text: #1A1204;        /* text inside light boxes */
-    --reverse-accent: #C42B0C;      /* accent inside light boxes — stays salsa
-                                       red in BOTH modes: the box bg never
-                                       darkens, and the dark-mode gold accent
-                                       is illegible on cream (contrast ~1.6) */
+    /* Panel surfaces (abstract, source-path, home concept cards). They follow
+       the theme like .citation-block does — white on cream here, dark in dark
+       mode — instead of staying light in both. Kept as aliases so the panels
+       inherit any future change to the base tokens. */
+    --reverse-bg:     var(--entry);
+    --reverse-text:   var(--primary);
+    --reverse-accent: var(--accent);
     color-scheme: light;
 }
 
@@ -112,9 +113,12 @@
     --text-muted: #888880;
     --button-text: #141414;         /* dark text on yellow buttons */
     --logo-white:  #EEEAD8;
-    --reverse-bg:   #F0EDE3;        /* light box bg in dark mode (abstract, source-path) */
-    --reverse-text: #1A1204;        /* dark text inside light boxes */
-    --reverse-accent: #C42B0C;      /* see light palette — must stay dark-on-light */
+    /* See the light palette: panels follow the theme. On the dark --entry
+       surface the gold accent is finally legible, so it no longer has to be
+       pinned to salsa red. */
+    --reverse-bg:     var(--entry);
+    --reverse-text:   var(--primary);
+    --reverse-accent: var(--accent);
     color-scheme: dark;
 }
 
