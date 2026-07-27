@@ -1,6 +1,0 @@
-# Cloudflare Pages project config.
-# Build command and HUGO_VERSION are set in the Pages dashboard (wrangler.toml
-# only supports name/output-dir for Pages) — see doc/deployment.md.
-name = "for-and-chips-blog"
-compatibility_date = "2025-01-01"
-pages_build_output_dir = "public"
