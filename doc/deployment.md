@@ -29,14 +29,16 @@ Create **two Pages projects** from the same GitHub repo:
 - Build command: `hugo --minify && npx pagefind@1 --site public`
 - Build output directory: `public`
 - Environment variables:
-  - `HUGO_VERSION` = `0.161.0` (keep in sync with local; Extended is default on Pages)
+  - `HUGO_VERSION` = `0.161.0` (keep in sync with local; must be the Extended build)
+  - `NODE_VERSION` = `24` (build-time only — runs `npx pagefind`; keep on a
+    current LTS, Cloudflare warns in the log when a version reaches EOL)
 - Custom domain: `forandchips.com`
 
 ### 2. `forandchips-demo`
 - Production branch: `demo`
 - Build command: `hugo --minify --environment demo && npx pagefind@1 --site public`
 - Build output directory: `public`
-- Environment variables: `HUGO_VERSION` = `0.161.0`
+- Environment variables: `HUGO_VERSION` = `0.161.0`, `NODE_VERSION` = `24`
 - Custom domain: `demo.forandchips.com`
 
 Notes:
