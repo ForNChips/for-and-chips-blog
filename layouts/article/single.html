@@ -22,9 +22,6 @@
     {{- if (.Param "ShowPostNavLinks") }}
     {{- partial "post_nav_links.html" . }}
     {{- end }}
-    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
-    {{- partial "share_icons.html" . -}}
-    {{- end }}
 
     <h1 class="post-title entry-hint-parent">
       {{ .Title }}
@@ -76,10 +73,19 @@
        (PDF button, related articles, citation, donation, comments)
        ═══════════════════════════════════════════════════════════ */}}
   <footer class="post-footer screen-only">
-    <button class="pdf-export-btn" onclick="window.print()" aria-label="Export as PDF">
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      Export PDF
-    </button>
+    <div class="post-actions">
+      {{- /* Copy link is always offered: it is deliberately independent of
+             site.Params.ShowShareButtons, which only governs the share bar
+             rendered after the citation block below. */}}
+      <button class="copy-link-btn" data-url="{{ .Permalink }}" aria-label="Copy link to this article">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span class="copy-link-btn__label">Copy link</span>
+      </button>
+      <button class="pdf-export-btn" onclick="window.print()" aria-label="Export as PDF">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Export PDF
+      </button>
+    </div>
   </footer>
 
   {{- $seealso := slice -}}
@@ -100,6 +106,11 @@
 
   <div class="screen-only">
     {{- partial "articles/citation.html" . }}
+    {{- /* Share bar sits after "Cite this article"; hidden site-wide while
+           site.Params.ShowShareButtons is false. */}}
+    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+    {{- partial "share_icons.html" . -}}
+    {{- end }}
     {{- partial "donation.html" . }}
     {{- if (site.Params.comments.enabled) }}
     {{- partial "comments.html" . }}

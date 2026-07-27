@@ -31,9 +31,10 @@
 {{- partial "helpers/script_tag.html" "js/extended/copy-code.js" }}
 {{- end }}
 
-{{- /* ── Article reading-progress bar ── */}}
+{{- /* ── Article reading-progress bar + footer copy-link button ── */}}
 {{- if and .IsPage (eq .Type "article") }}
 {{- partial "helpers/script_tag.html" "js/extended/progress-bar.js" }}
+{{- partial "helpers/script_tag.html" "js/extended/copy-link.js" }}
 {{- end }}
 
 {{- /* ── Paginator + page-specific filters ──

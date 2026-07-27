@@ -48,8 +48,18 @@ h1.post-title {
   cursor: help;
 }
 
-/* ── PDF export button ───────────────────────────────── */
-.pdf-export-btn {
+/* ── Article footer actions (copy link + PDF export) ─── */
+.post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media print { display: none !important; }
+}
+
+.pdf-export-btn,
+.copy-link-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -71,6 +81,13 @@ h1.post-title {
   }
 
   @media print { display: none !important; }
+}
+
+/* Keep the button from resizing while the label flips to "Link copied!" */
+.copy-link-btn__label {
+  display: inline-block;
+  min-width: 6.2em;
+  text-align: left;
 }
 
 /* ── Reading progress bar ────────────────────────────── */
