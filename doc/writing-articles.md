@@ -207,8 +207,12 @@ article. The bag page lists members sorted by that order.
 - **No em/en dashes in prose** — commas, parentheses or a new sentence. Em
   dashes are fine in figure/table captions after the number.
 - **No `---` horizontal rules** in the body (reserved for frontmatter).
-- Classical section scaffolding (Introduction / Method / Results / …); H1 for
-  major sections (the page title comes from frontmatter).
+- Classical section scaffolding (Introduction / Method / Results / …).
+  **Start body sections at `##`**, sub-sections at `###`, and so on. The page
+  title comes from frontmatter and is rendered as the page's single `<h1>`;
+  using `#` in the body would add competing h1s and flatten the outline that
+  screen readers and the table of contents rely on. Section headings still
+  *look* the same size — the stylesheet remaps the scale.
 - End with a "See also" block of `{{</* ref */>}}` links, then the References.
 
 ## 11. Publish
