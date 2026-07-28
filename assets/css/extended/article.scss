@@ -7,7 +7,7 @@ h1.post-title {
   letter-spacing: -0.02em;  
   font-weight: 780;
   margin-bottom: 1rem;
-  font-family: "Avenir";
+  font-family: var(--font-body);
 }
 
   code {
@@ -111,7 +111,7 @@ h1.post-title {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--reverse-text);
-  font-family: "Avenir";
+  font-family: var(--font-body);
 
   code {
     color: var(--reverse-accent);
@@ -160,7 +160,7 @@ h1.post-title {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--reverse-text);
-  font-family: "Avenir";
+  font-family: var(--font-body);
 
 
   &::before {
@@ -187,7 +187,7 @@ h1.post-title {
   font-size: 0.85rem;
   color: var(--content);
   margin-bottom: 1.5rem;
-  font-family: "Avenir";
+  font-family: var(--font-body);
 
   .post-authors {
     font-weight: 500;
@@ -224,7 +224,7 @@ font-weight: 500;
 letter-spacing: 0.01em;
 font-size: 1rem;
 text-transform: none;
-font-family: "Avenir";
+font-family: var(--font-body);
 }
 
 .toc {
@@ -243,7 +243,7 @@ font-family: "Avenir";
   letter-spacing: 0.01em;
   font-size: 1rem;
   text-transform: none;
-  font-family: "Avenir";
+  font-family: var(--font-body);
 }
 
 
@@ -426,7 +426,7 @@ font-family: "Avenir";
       background-color: var(--code-snippet-bg) !important;
       border-radius: 0 0 10px 10px;
       overflow-x: auto;
-      font-family: "Avenir";
+      font-family: var(--font-body);
     }
 
     pre > code {
