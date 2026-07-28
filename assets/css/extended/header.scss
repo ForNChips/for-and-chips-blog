@@ -113,6 +113,14 @@ button#theme-toggle {
     padding: 0 0.5rem 0 1rem;
     gap: 0.4rem;
     height: 1.7rem;
+
+    /* Ring the whole pill rather than the inset <input>, which otherwise draws
+       a small rectangle floating inside the bar. Scoped to the input so that
+       focusing the submit button rings the button alone, not both. */
+    &:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
 }
 
 .nav-search input {
@@ -123,15 +131,7 @@ button#theme-toggle {
     color: inherit;
     width: clamp(50px, 15vw, 500px);
     transition: width 0.3s ease;
-
-    /* The `outline: none` above (specificity 0,1,1) out-specifies the global
-       :focus-visible ring in accessibility.scss (0,1,0), so keyboard users
-       would get no focus indicator at all. Restate it here. */
-    &:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-        border-radius: 4px;
-    }
+    /* Deliberately no focus ring here — .nav-search rings the whole pill. */
 }
 
 .nav-search button {
@@ -339,6 +339,12 @@ body.nav-dropdown-open {
     height: 2.5rem;
     margin-bottom: 2rem;
 
+    /* Ring the pill, not the inset input — see .nav-search. */
+    &:has(input:focus-visible) {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+    }
+
     input {
         border: none;
         background: transparent;
@@ -346,13 +352,6 @@ body.nav-dropdown-open {
         font-size: 1rem;
         color: inherit;
         width: 100%;
-
-        /* See .nav-search input — restate the keyboard focus ring. */
-        &:focus-visible {
-            outline: 2px solid var(--accent);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
     }
 
     button {
