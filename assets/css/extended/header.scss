@@ -114,13 +114,9 @@ button#theme-toggle {
     gap: 0.4rem;
     height: 1.7rem;
 
-    /* Ring the whole pill rather than the inset <input>, which otherwise draws
-       a small rectangle floating inside the bar. Scoped to the input so that
-       focusing the submit button rings the button alone, not both. */
-    &:has(input:focus-visible) {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-    }
+    /* Focus indicator: recolour the pill's own border instead of adding an
+       outline, which would draw a second line outside the existing one. */
+    &:focus-within { border-color: var(--accent); }
 }
 
 .nav-search input {
@@ -339,11 +335,8 @@ body.nav-dropdown-open {
     height: 2.5rem;
     margin-bottom: 2rem;
 
-    /* Ring the pill, not the inset input — see .nav-search. */
-    &:has(input:focus-visible) {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-    }
+    /* See .nav-search — recolour the border, don't add an outline. */
+    &:focus-within { border-color: var(--accent); }
 
     input {
         border: none;
