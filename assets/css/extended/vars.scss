@@ -6,8 +6,21 @@
  *   --content   = article body text inside .post-content
  */
 
- body {
-  font-family: "Avenir";
+/* Body typeface.
+   Avenir / Avenir Next ship with macOS but NOT with Windows or Linux, and a
+   bare `font-family: "Avenir"` replaces PaperMod's system stack with nothing,
+   so those platforms fell back to the browser default (a serif). Avenir is a
+   commercial Monotype face, so it cannot legally be self-hosted — hence a
+   fallback chain ending in the platform's own humanist sans.
+   `Nunito Sans` is listed for the day we self-host a free Avenir-alike; it is
+   simply skipped while no such font is installed or @font-face'd. */
+:root {
+  --font-body: "Avenir Next", "Avenir", "Nunito Sans", "Segoe UI", system-ui,
+               -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
 }
 
 @mixin layout {
