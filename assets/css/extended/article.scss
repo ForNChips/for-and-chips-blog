@@ -304,10 +304,17 @@ font-family: var(--font-body);
    Article body styling (.post-content)
    ═══════════════════════════════════════════════════════════ */
 .post-content {
+  /* Body sections start at h2 so the article title is the page's only h1
+     (see doc/writing-articles.md). The visual scale is remapped one level up
+     so the rendered page looks exactly as it did when sections were h1:
+     h2 takes the old h1 size, h3 the old h2, and so on. */
+  h2 { font-size: 2.25rem;    margin: 3rem 0 1.5rem; }
+  h3 { font-size: 1.6875rem;  margin: 2.5rem 0 1.25rem; }
+  h4 { font-size: 1.3163rem;  margin: 2rem 0 1rem; }
+  h5 { font-size: 1.125rem;   margin: 1.75rem 0 0.75rem; }
+
+  /* Kept for any legacy article still using `#` for a section. */
   h1 { margin: 3rem 0 1.5rem; }
-  h2 { margin: 2.5rem 0 1.25rem; }
-  h3 { margin: 2rem 0 1rem; }
-  h4 { margin: 1.75rem 0 0.75rem; }
 
   p {text-align: justify;}
 
