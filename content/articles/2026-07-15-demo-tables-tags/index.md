@@ -21,13 +21,13 @@ references: []
 
 > 📄 This is **dummy content** for the For&Chips demo site. The numbers in the table were typed, not measured.
 
-# Introduction
+## Introduction
 
 This placeholder article exists mainly to carry tags. Its flavours overlap
 with the other demo articles, which connects them in the article graph and
 makes the tag pills on the articles page worth clicking.
 
-# Results
+## Results
 
 Synthetic results go in tables; interpretation stays in prose. The values
 below are invented for layout purposes.
@@ -38,7 +38,7 @@ below are invented for layout purposes.
 | Paprika | 97 | 88% |
 | Plain | 42 | 61% |
 
-# Take-aways
+## Take-aways
 
 Tables render with the theme, tags filter across the articles and tools pages,
 and every tag pill links back to a filtered list.

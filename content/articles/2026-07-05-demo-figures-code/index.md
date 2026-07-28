@@ -28,7 +28,7 @@ references: []
 
 > 📄 This is **dummy content** for the For&Chips demo site. The queries below run against a database that does not exist.
 
-# Introduction
+## Introduction
 
 This placeholder article shows how technical material is presented. Figures
 always carry a caption and are referenced from the prose, as Figure 1
@@ -38,7 +38,7 @@ demonstrates with a placeholder illustration.
            alt="Placeholder illustration used by the demo article"
            caption="Figure 1 — A placeholder image standing in for a real chart or screenshot." >}}
 
-# Code blocks
+## Code blocks
 
 Code snippets are syntax highlighted, follow the light and dark theme, and get
 a copy button:
@@ -58,7 +58,7 @@ Shell examples work the same way:
 demo-crumb-extractor --input backup.zip --table crumbs --output crumbs.csv
 {{</code >}}
 
-# Take-aways
+## Take-aways
 
 Figures, file-path boxes and code blocks cover most of what a technical
 article needs; everything else is plain markdown.

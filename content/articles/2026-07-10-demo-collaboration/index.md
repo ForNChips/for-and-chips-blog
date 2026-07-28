@@ -26,13 +26,13 @@ references: []
 
 > 📄 This is **dummy content** for the For&Chips demo site. The authors are fictional and so is their collaboration.
 
-# Introduction
+## Introduction
 
 This placeholder article is co-signed by three fictional authors. Multi-author
 articles feed the collaboration graph on the authors page, where each shared
 publication becomes an edge between chips.
 
-# Cross-references
+## Cross-references
 
 Articles never link each other with relative markdown paths; they use a
 shortcode that survives slug changes. See
@@ -40,7 +40,7 @@ shortcode that survives slug changes. See
 {{< ref "articles/2026-07-05-demo-figures-code" "the figures and code demo" >}}
 for technical presentation.
 
-# Take-aways
+## Take-aways
 
 Shared tags between the demo articles also populate the article graph, which
 draws one node per article and connects those with overlapping flavours.

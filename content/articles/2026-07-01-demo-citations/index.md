@@ -25,25 +25,25 @@ references:
 
 > 📄 This is **dummy content** for the For&Chips demo site. The study it pretends to accompany does not exist.
 
-# Introduction
+## Introduction
 
 This placeholder article demonstrates the academic citation workflow. A claim
 can be backed by a source, like the entirely fictional finding that crisps
 survive database journaling {{< cite "crunchy_placeholder_2026" >}}. Citations
 with a locator are supported too {{< cite "chips_field_2025" "p. 42" >}}.
 
-# Method
+## Method
 
 Each article folder carries its own `references.bib`. The `references:` block
 in the frontmatter is regenerated automatically at commit time, so authors only
 maintain the BibTeX file and the cite shortcodes. A dataset citation looks the
 same as any other {{< cite "potato_dataset_2024" >}}.
 
-# Take-aways
+## Take-aways
 
 The bibliography below is rendered by a shortcode and lists exactly the works
 cited above, formatted consistently in every article.
 
-## Références
+### Références
 
 {{< bibliography >}}
