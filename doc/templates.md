@@ -93,13 +93,22 @@ Every file under `layouts/` and what it does. Hugo resolves templates by `kind` 
 
 ## Shortcodes
 
-Authors use these in article bodies. All three live in `layouts/shortcodes/`.
+Authors use these in article bodies. They all live in `layouts/shortcodes/`.
 
 | Shortcode             | Usage                                            | What it does                                                                 |
 | --------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------- |
 | `{{< cite "key" >}}`  | Inline citation                                  | Looks up `key` in `data/references.yml` and prints `(Author, Year)` linking to the bibliography section. Records the key for the `references:` frontmatter sync. |
 | `{{< bibliography >}}`| End-of-article bibliography                      | Renders the article's `references:` list as a numbered list pulled from `data/references.yml`. |
 | `{{< ref "slug" >}}`  | Cross-reference another article                  | Resolves to a `<a href="/articles/<slug>/">Title</a>` with the target article's title. Fails the build if the slug doesn't exist. |
+| `{{< figure … >}}`    | An image with a caption                          | Overrides PaperMod's. Prefixes the caption with an auto-generated `Figure N` and, when `id` is set, adds an `id="fig-<id>"` anchor. `numbered="false"` opts out. |
+| `{{< figrow >}}…{{< /figrow >}}` | Several figures side by side           | CSS-grid container; the figures share the row's image and caption tracks (`subgrid`) so every caption starts on the same line. `widths` / `cols` tune the columns. |
+| `{{< figref "id" >}}` | In-text reference to a figure                    | Renders `Figure N` linked to `#fig-<id>`; an unknown id renders a visible `Figure ?` marker (and is reported by `scripts/validate.py`). |
+
+Figure numbers come from `partials/helpers/figure-numbers.html`, which scans
+the page's **raw markdown** for `figure` shortcodes in document order and caches
+the resulting `id → number` map in the page store. It deliberately does not use
+a render-time counter: a page's content is rendered several times (page, RSS,
+search index), which would make a counter keep climbing.
 
 ## Conventions
 

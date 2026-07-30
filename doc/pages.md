@@ -46,7 +46,7 @@ Lists all articles with client-side tag filter (`tag-filter.js`) and pagination 
 | Partials            | `partials/articles/article_meta.html`, `partials/articles/article_authors.html`, `partials/articles/citation.html`, `partials/tags/keyword_badges.html`, `partials/helpers/thumb.html`, `partials/seo/google_scholar.html` |
 | Shortcodes used     | `cite.html`, `bibliography.html`, `ref.html` |
 | Data                | `hugo.Data.authors`, `hugo.Data.references`, `hugo.Data.tags` |
-| SCSS                | `article.scss`, `citations.scss`, `keywords.scss`, `print.scss` (paged-media), `donation.scss` |
+| SCSS                | `article.scss`, `figures.scss`, `citations.scss`, `keywords.scss`, `print.scss` (paged-media), `donation.scss` |
 | JS                  | `progress-bar.js`                           |
 
 The reading-progress bar at the top is wired by `progress-bar.js`. Citations resolve via `cite.html` → `data/references.yml`. Print stylesheet (`print.scss`) restyles to a two-column academic layout for `Cmd-P`.

@@ -1,0 +1,25 @@
+{{- /*
+  figref — an in-text cross-reference to a numbered figure of the same page.
+
+  Defines: the `figref` shortcode ("Figure 6", linked to the figure).
+  Used by: article prose, e.g. "the points overshoot the impact ({{< figref "case1-b" >}})".
+  Uses:    layouts/partials/helpers/figure-numbers.html (numbering),
+           assets/css/extended/article.scss (.fig-ref styling).
+
+  Usage:
+    {{< figref "corner" >}}            → Figure 6
+    {{< figref "corner" "see there" >}} → custom label, same link
+
+  The target must be a `figure` carrying the matching `id`. An unknown id
+  renders a visible "Figure ?" marker rather than failing the build, so the
+  problem is caught in review; scripts/validate.py also reports it.
+*/ -}}
+{{- $id := .Get 0 -}}
+{{- $label := .Get 1 -}}
+{{- $numbers := partial "helpers/figure-numbers.html" .Page -}}
+{{- $num := index $numbers $id -}}
+{{- if $num -}}
+<a class="fig-ref" href="#fig-{{ $id }}">{{ with $label }}{{ . }}{{ else }}Figure {{ $num }}{{ end }}</a>
+{{- else -}}
+<span class="fig-ref-missing" title="No figure with id='{{ $id }}' on this page">Figure ?</span>
+{{- end -}}

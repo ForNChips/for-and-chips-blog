@@ -29,6 +29,7 @@ PaperMod's "extended" convention auto-loads any file in `assets/css/extended/`, 
 | `keywords.scss`   | Tag/keyword chip styles.                                    |
 | `tags.scss`       | `/tags` page (taxonomy + term).                             |
 | `article.scss`    | Single article body (typography, headings, callouts).       |
+| `figures.scss`    | Figures: images, captions, `figrow` grid, `figref` links.   |
 | `chroma.scss`     | Theme-aware syntax highlighting. Every colour comes from `vars.scss`: `--code-*` (canvas, inks) + `--chroma-*` (one var per token family; dark = nord originals, light = HSL-darkened variants ≥ 4.5:1 on white). Requires `markup.highlight.noClasses: false`. |
 | `tools.scss`      | `/tools` intro + single-tool link row (the card grid reuses `cards.scss`). |
 | `article_list.scss`| `/articles` page layout.                                   |
