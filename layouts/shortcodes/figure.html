@@ -1,0 +1,64 @@
+{{- /*
+  figure — an image with an auto-numbered caption and a stable anchor.
+
+  Defines: the site's `figure` shortcode (overrides the PaperMod one).
+  Used by: article bodies, directly or nested inside `figrow`.
+  Uses:    layouts/partials/helpers/figure-numbers.html (numbering),
+           assets/css/extended/article.scss (.fig-* styling).
+
+  Params:
+    src        (required) image path, relative to the article bundle
+    alt        (required) alternative text
+    caption    caption text, WITHOUT the "Figure N — " prefix (added here)
+    id         short slug used for cross-references: {{< figref "id" >}}
+    numbered   "false" to opt out of numbering, anchoring and cross-refs
+    link/target/rel, width, height, class, attr/attrlink — as in PaperMod
+
+  HOW: the figure asks the page-wide numbering map (built once from the raw
+  markdown) for its own number, looked up by `id` when present and by `src`
+  otherwise, then renders "Figure N — <caption>" and an id="fig-…" anchor.
+  WHY the number is not written by hand: manual numbers drift as soon as a
+  figure is inserted or moved, and cross-references then point at the wrong
+  image.
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $id := .Get "id" -}}
+{{- $numbered := ne (.Get "numbered") "false" -}}
+{{- $caption := .Get "caption" -}}
+
+{{- $num := 0 -}}
+{{- if $numbered -}}
+  {{- $numbers := partial "helpers/figure-numbers.html" .Page -}}
+  {{- $key := cond (ne $id "") $id (printf "src:%s" $src) -}}
+  {{- with index $numbers $key -}}{{- $num = . -}}{{- end -}}
+{{- end -}}
+{{- $anchor := "" -}}
+{{- if and $numbered (gt $num 0) -}}
+  {{- $anchor = cond (ne $id "") (printf "fig-%s" $id) (printf "fig-%d" $num) -}}
+{{- end -}}
+
+<figure
+  {{- with $anchor }} id="{{ . }}"{{ end }}
+  {{- $classes := slice }}
+  {{- if eq (.Get "align") "center" }}{{ $classes = $classes | append "align-center" }}{{ end }}
+  {{- with .Get "class" }}{{ $classes = $classes | append . }}{{ end }}
+  {{- with $classes }} class="{{ delimit . " " }}"{{ end -}}
+>
+  {{- with .Get "link" }}<a href="{{ . }}"{{ with $.Get "target" }} target="{{ . }}"{{ end }}{{ with $.Get "rel" }} rel="{{ . }}"{{ end }}>{{ end -}}
+  <img loading="lazy" src="{{ $src }}{{ if eq (.Get "align") "center" }}#center{{ end }}"
+       alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ $caption | markdownify | plainify }}{{ end }}"
+       {{- with .Get "width" }} width="{{ . }}"{{ end }}
+       {{- with .Get "height" }} height="{{ . }}"{{ end }} />
+  {{- if .Get "link" }}</a>{{ end -}}
+
+  {{- if or $caption (.Get "title") (.Get "attr") (gt $num 0) }}
+  <figcaption>
+    {{- with .Get "title" }}{{ . }}{{ end -}}
+    {{- if gt $num 0 }}<span class="fig-label">Figure {{ $num }}</span>{{ with $caption }} — {{ end }}{{ end -}}
+    {{- with $caption }}{{ . | markdownify }}{{ end -}}
+    {{- with .Get "attr" }}
+      {{- with $.Get "attrlink" }}<a href="{{ . }}">{{ end }}{{ $.Get "attr" | markdownify }}{{ if $.Get "attrlink" }}</a>{{ end }}
+    {{- end }}
+  </figcaption>
+  {{- end }}
+</figure>

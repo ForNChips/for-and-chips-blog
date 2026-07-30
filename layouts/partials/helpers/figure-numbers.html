@@ -1,0 +1,53 @@
+{{- /*
+  Figure numbering — builds the page's "figure key → number" map.
+
+  Defines: the single source of truth for figure numbers on a page.
+  Used by:  layouts/shortcodes/figure.html, layouts/shortcodes/figref.html.
+  Uses:     the page's raw markdown (shortcodes are scanned as plain text).
+
+  Call with the page as context:  {{ partial "helpers/figure-numbers.html" .Page }}
+
+  HOW: the raw content is scanned for `{{< figure … >}}` openings in document
+  order (including those nested inside a `figrow`); each takes the next
+  number, which is stored under both its `id` and under `src:<src>` so a
+  figure can look its own number up from either attribute. Figures carrying
+  `numbered="false"` are skipped and consume no number.
+
+  WHY a raw scan rather than an incrementing render-time counter: a page's
+  content is rendered more than once (full page, summary, search index), so a
+  counter kept in the page store would keep climbing across renders and hand
+  out different numbers each time. The scan is idempotent.
+*/ -}}
+{{- $page := . -}}
+{{- $cacheKey := "figureNumbers" -}}
+{{- $numbers := $page.Store.Get $cacheKey -}}
+{{- if not $numbers -}}
+  {{- $numbers = dict -}}
+  {{- $n := 0 -}}
+  {{- range findRE `(?s)\{\{<\s*figure\s.*?>\}\}` $page.RawContent -}}
+    {{- $tag := . -}}
+    {{- /* Opted out of numbering: consumes no number and gets no anchor. */ -}}
+    {{- if not (findRE `numbered="false"` $tag) -}}
+      {{- $n = add $n 1 -}}
+      {{- /* First occurrence wins for both keys. WHY: a repeated id (or the
+             same image reused without ids) must not retro-assign a number to
+             the figure that claimed the key first, which would silently
+             redirect every earlier cross-reference to the later figure.
+             Duplicates are reported by scripts/validate.py. */ -}}
+      {{- with findRESubmatch `\bid="([^"]+)"` $tag 1 -}}
+        {{- $key := index (index . 0) 1 -}}
+        {{- if not (index $numbers $key) -}}
+          {{- $numbers = merge $numbers (dict $key $n) -}}
+        {{- end -}}
+      {{- end -}}
+      {{- with findRESubmatch `\bsrc="([^"]+)"` $tag 1 -}}
+        {{- $key := printf "src:%s" (index (index . 0) 1) -}}
+        {{- if not (index $numbers $key) -}}
+          {{- $numbers = merge $numbers (dict $key $n) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $page.Store.Set $cacheKey $numbers -}}
+{{- end -}}
+{{- return $numbers -}}

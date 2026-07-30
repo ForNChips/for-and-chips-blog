@@ -21,6 +21,16 @@ SLUG_RE  = re.compile(r"^[a-z0-9]+(?:[-_][a-z0-9]+)*$")
 IMG_RE   = re.compile(r"!\[[^\]]*\]\(([^)\s]+)")
 CITE_RE  = re.compile(r'\{\{<\s*cite\s+"([^"]+)"')
 
+# Figure shortcodes. FIGURE_RE grabs the whole opening tag (they often span
+# several lines, hence DOTALL + non-greedy) so the attributes can then be read
+# from it individually; FIGREF_RE grabs the id an in-text cross-reference
+# points at. Kept in sync with layouts/shortcodes/{figure,figref}.html.
+FIGURE_RE   = re.compile(r"\{\{<\s*figure\s.*?>\}\}", re.DOTALL)
+FIG_SRC_RE  = re.compile(r'\bsrc="([^"]+)"')
+FIG_ID_RE   = re.compile(r'\bid="([^"]+)"')
+FIG_NONUM_RE = re.compile(r'numbered="false"')
+FIGREF_RE   = re.compile(r'\{\{<\s*figref\s+"([^"]+)"')
+
 
 # ---------------------------------------------------------------------------
 # Findings: accumulator passed through every check.
@@ -298,14 +308,55 @@ def check_article(
                     f"[{rel}] Local .bib in {post_dir.relative_to(ROOT)}/ contains '{key}' but it is never cited"
                 )
 
-    # Image references in body must exist on disk
+    # Image references in body must exist on disk — markdown images and the
+    # src of every figure shortcode alike.
     post_dir = filepath.parent
-    for src in IMG_RE.findall(body):
+    figure_tags = FIGURE_RE.findall(body)
+    figure_srcs = [m.group(1) for m in (FIG_SRC_RE.search(t) for t in figure_tags) if m]
+    for src in IMG_RE.findall(body) + figure_srcs:
         if src.startswith(("http://", "https://", "data:")):
             continue
         target = (post_dir / src).resolve()
         if not target.exists():
             findings.error(f"[{rel}] Image reference '{src}' not found on disk")
+
+    # Figure ids and cross-references. An id is what {{< figref >}} resolves
+    # against, so a duplicate or a dangling one silently sends the reader to
+    # the wrong figure (or nowhere) — both are errors, not style issues.
+    figure_ids: list[str] = []
+    for tag in figure_tags:
+        id_match = FIG_ID_RE.search(tag)
+        if not id_match:
+            continue
+        if FIG_NONUM_RE.search(tag):
+            findings.error(
+                f"[{rel}] Figure id '{id_match.group(1)}' on a numbered=\"false\" figure — "
+                "unnumbered figures get no anchor and cannot be referenced"
+            )
+            continue
+        figure_ids.append(id_match.group(1))
+
+    for fig_id in sorted({i for i in figure_ids if figure_ids.count(i) > 1}):
+        findings.error(f"[{rel}] Duplicate figure id '{fig_id}'")
+
+    # A figure with no id is numbered by its src, so the same image used twice
+    # without ids makes the second occurrence display the first one's number.
+    numbered = [
+        (m.group(1), bool(FIG_ID_RE.search(t)))
+        for t, m in ((t, FIG_SRC_RE.search(t)) for t in figure_tags)
+        if m and not FIG_NONUM_RE.search(t)
+    ]
+    all_srcs = [src for src, _ in numbered]
+    for src in sorted(
+        {src for src, has_id in numbered if not has_id and all_srcs.count(src) > 1}
+    ):
+        findings.error(
+            f"[{rel}] Image '{src}' is used by several figures with no id — "
+            "give each of them a distinct id, or they share one figure number"
+        )
+
+    for fig_id in sorted(set(FIGREF_RE.findall(body)) - set(figure_ids)):
+        findings.error(f"[{rel}] figref '{fig_id}' has no matching figure id on this page")
 
     # Cover image (info only)
     if not list(post_dir.glob("images/cover.*")):
@@ -487,9 +538,14 @@ def check_orphans(
         post_dir = filepath.parent
         images_dir = post_dir / "images"
         if images_dir.is_dir():
+            body_srcs = IMG_RE.findall(body) + [
+                m.group(1)
+                for m in (FIG_SRC_RE.search(t) for t in FIGURE_RE.findall(body))
+                if m
+            ]
             referenced = {
                 (post_dir / src).resolve()
-                for src in IMG_RE.findall(body)
+                for src in body_srcs
                 if not src.startswith(("http://", "https://", "data:"))
             }
             for img in images_dir.iterdir():

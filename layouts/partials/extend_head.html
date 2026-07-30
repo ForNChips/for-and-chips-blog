@@ -1,3 +1,7 @@
+{{- /* PWA manifest — points at the 192/512 icons in static/logos/favicons/,
+       so Android "add to home screen" uses the brand mark. */}}
+<link rel="manifest" href="{{ "site.webmanifest" | absURL }}">
+
 {{- $opts := dict "transpiler" "dartsass" "outputStyle" "compressed" }}
 {{- $main := resources.Get "css/extended/main.scss" | css.Sass $opts | fingerprint }}
 <link rel="stylesheet" href="{{ $main.RelPermalink }}" integrity="{{ $main.Data.Integrity }}">

@@ -1,0 +1,28 @@
+{
+  "name": "For&Chips",
+  "short_name": "For&Chips",
+  "description": "A community-driven digital forensics blog. Follow the crumbs with us.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1F1F1F",
+  "theme_color": "#1F1F1F",
+  "icons": [
+    {
+      "src": "/logos/favicons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/favicons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/favicons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

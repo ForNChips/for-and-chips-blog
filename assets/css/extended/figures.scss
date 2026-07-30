@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════════════════════
+   Figures — images, captions, figure rows, cross-references
+
+   Defines: every figure-related rule of the article body.
+   Used by: layouts/shortcodes/{figure,figrow,figref}.html, imported from
+            assets/css/extended/main.scss.
+   Scoped to `.post-content` so it only applies inside an article body.
+   ═══════════════════════════════════════════════════════════ */
+.post-content {
+  /* ── Images: centred, 80% width, framed ─────────────── */
+  img {
+    display: block;
+    margin: 2rem auto;
+    width: clamp(320px, 80%, 850px);
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+  }
+
+  /* ── Figures: image + caption centred below ──────────── */
+  figure {
+    margin: 2rem auto;
+    text-align: center;
+
+    img {
+      margin: 0 auto 0.5rem;
+    }
+
+    figcaption {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-style: italic;
+      text-align: center;
+      margin-top: 0.5rem;
+      max-width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+
+      .fig-label {
+        font-style: normal;
+        font-weight: 600;
+        color: var(--primary);
+      }
+    }
+  }
+
+  /* ── Figure rows: several figures side by side ────────
+     Captions must all start on the same line even when the images differ
+     slightly in height, which a table layout could not guarantee (each cell
+     sizes to its own content). The row therefore owns two tracks — images,
+     then captions — and every figure inherits them through `subgrid`, so the
+     image track is as tall as the tallest image and all captions begin below
+     it. Images are bottom-aligned so they sit flush against their caption. */
+  .fig-row {
+    display: grid;
+    grid-auto-flow: column;         /* one column per figure by default */
+    grid-auto-columns: 1fr;
+    grid-template-rows: auto auto;  /* [0] images, [1] captions */
+    gap: 0.75rem 1.25rem;
+    align-items: end;
+    margin: 2rem auto;
+
+    figure {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+      margin: 0;
+      min-width: 0;                 /* let the column shrink below the image's intrinsic width */
+    }
+
+    img {
+      /* Overrides the article-wide `width: clamp(320px, 80%, 850px)`, which
+         would otherwise force each figure wider than its column. */
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      align-self: end;
+    }
+
+    figcaption {
+      max-width: 100%;
+      margin-top: 0.35rem;
+    }
+  }
+
+  /* Fallback for engines without `subgrid`: captions still line up whenever
+     the images share a height, which is the common case for a figure row. */
+  @supports not (grid-template-rows: subgrid) {
+    .fig-row figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  }
+
+  /* Narrow screens: stack the figures rather than squeezing them. */
+  @media (max-width: 700px) {
+    .fig-row {
+      grid-auto-flow: row !important;
+      grid-template-columns: 1fr !important;
+      grid-template-rows: none;
+      gap: 1.5rem;
+
+      figure {
+        display: block;
+        grid-row: auto;
+      }
+    }
+  }
+
+  /* ── In-text figure cross-references ──────────────────── */
+  .fig-ref {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .fig-ref-missing {
+    color: #c0392b;
+    border-bottom: 1px dashed #c0392b;
+  }
+
+  /* The anchor must clear the sticky header when a cross-reference is followed. */
+  figure[id] {
+    scroll-margin-top: 5rem;
+  }
+}
