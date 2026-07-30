@@ -53,7 +53,8 @@ Hugo does the heavy lifting. Everything else exists to feed Hugo clean inputs or
 │   ├── index.html                 # homepage
 │   ├── 404.html
 │   ├── partials/                  # reusable fragments
-│   └── shortcodes/                # {{< cite >}}, {{< ref >}}, {{< bibliography >}}
+│   └── shortcodes/                # {{< cite >}}, {{< ref >}}, {{< bibliography >}},
+│                                  # {{< figure >}}, {{< figrow >}}, {{< figref >}}
 ├── scripts/                       # Python helpers + git hook backends
 │   ├── bib_to_yaml.py             # .bib  → data/references.yml
 │   ├── sync_citations.py          # frontmatter `references:` ←→ shortcodes

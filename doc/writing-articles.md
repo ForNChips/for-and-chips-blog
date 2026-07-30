@@ -164,14 +164,55 @@ caption and must be mentioned in the surrounding prose:
 ```markdown
 {{</* figure src="images/speed_quality.png"
             alt="Comparison of iPhone vs reference speed"
-            caption="Figure 3 — Reported iPhone speed vs VBOX reference, by phase." */>}}
+            id="speed-quality"
+            caption="Reported iPhone speed vs VBOX reference, by phase." */>}}
 ```
 
+- **Never write the figure number in the caption.** `Figure N — ` is added
+  automatically, numbering in document order across the whole page (rows
+  included), so inserting or moving a figure renumbers everything by itself.
+- `id` is optional but required to cross-reference the figure; use a short
+  slug, unique within the page.
+- `numbered="false"` opts a purely decorative image out of numbering (it then
+  gets no anchor and cannot be referenced).
 - No bare `![](images/…)` and no orphan figures (house style).
 - `images/cover.png` (or `.jpg`/`.webp`) becomes the card thumbnail and page
   header; without it a placeholder gradient + tag chip is used.
 - Converting a PDF figure: `pdftoppm -png -r 200 source.pdf images/name`, then
   rename the `-1` suffix away.
+
+### Several figures on one row
+
+Wrap two or more figures in `figrow`. Each keeps its own number and caption,
+and the captions all start on the same line even when the images differ in
+height:
+
+```markdown
+{{</* figrow */>}}
+{{</* figure src="images/straight.png" alt="…" id="seg-straight" caption="Straight-line section." */>}}
+{{</* figure src="images/corner.png"   alt="…" id="seg-corner"   caption="Cornering section." */>}}
+{{</* /figrow */>}}
+```
+
+- Default: one equal column per figure. `widths="2fr 1fr"` gives uneven
+  columns, `cols="2"` forces a fixed column count (figures then wrap onto
+  further rows).
+- Below 700 px the row stacks vertically.
+- Do **not** use a markdown table for this — cells size to their own content,
+  which is what pushed the captions out of line.
+
+### Referring to a figure in the text
+
+Use `figref` with the figure's `id`; the number is resolved at build time:
+
+```markdown
+The points overshoot the impact point ({{</* figref "case1-b" */>}}).
+Compare with {{</* figref "seg-corner" "the cornering panel" */>}}.
+```
+
+`{{</* figref */>}}` renders `Figure 6` as a link to the figure. A dangling id
+renders a visible `Figure ?` and is reported by `scripts/validate.py`, which
+also flags duplicate ids and missing image files.
 
 ## 8. Other body features
 

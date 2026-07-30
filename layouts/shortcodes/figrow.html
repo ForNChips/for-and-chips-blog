@@ -1,0 +1,37 @@
+{{- /*
+  figrow — lays several `figure` shortcodes side by side on one row, with the
+  images bottom-aligned and every caption starting on the same baseline.
+
+  Defines: the `figrow` container shortcode.
+  Used by: article bodies wrapping two or more `figure` shortcodes.
+  Uses:    assets/css/extended/article.scss (.fig-row grid).
+
+  Usage:
+    {{< figrow >}}
+      {{< figure src="images/a.png" alt="…" id="straight" caption="Straight line." >}}
+      {{< figure src="images/b.png" alt="…" id="corner"   caption="Cornering." >}}
+    {{< /figrow >}}
+
+  Params:
+    cols    force a column count (default: one column per figure)
+    widths  CSS grid track list, e.g. "2fr 1fr", when the images should not
+            share the width equally
+
+  HOW: the inner shortcodes are emitted untouched inside a CSS grid; the
+  alignment work is done in the stylesheet with `subgrid`, so each figure
+  shares the row's image track and caption track. WHY not a markdown table
+  (the earlier approach): table cells size themselves to their own content,
+  so images of slightly different aspect ratios pushed the captions to
+  different heights.
+*/ -}}
+{{- $cols := .Get "cols" -}}
+{{- $widths := .Get "widths" -}}
+{{- $style := "" -}}
+{{- if $widths -}}
+  {{- $style = printf "grid-template-columns:%s;grid-auto-flow:row;" $widths -}}
+{{- else if $cols -}}
+  {{- $style = printf "grid-template-columns:repeat(%s,1fr);grid-auto-flow:row;" $cols -}}
+{{- end -}}
+<div class="fig-row"{{ with $style }} style="{{ . | safeCSS }}"{{ end }}>
+{{ .Inner }}
+</div>
