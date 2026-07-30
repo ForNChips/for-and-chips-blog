@@ -10,11 +10,14 @@ raster) and `magick` (crop, pad, convert). No AI-generated imagery.
 
 ```
 brand/
-├── masters/          the only originals
+├── masters/          the originals + the two composed lockups
 │   ├── logo_4nchips.svg
-│   └── banner.png
+│   ├── banner.png
+│   ├── logo-lockup-horizontal.svg
+│   └── logo-lockup-stacked.svg
 └── exports/
     ├── logo/         square avatars + the dark-background vector
+    ├── lockup/       icon + wordmark, light/dark/transparent
     └── banner/       wide covers, social cards, optimised banner
 ```
 
@@ -39,6 +42,24 @@ Shared values (from `assets/css/extended/vars.scss`):
 |---|---|
 | `logo_4nchips.svg` | The logo, vector, 731×1142 (aspect 0.642). Coloured for **light backgrounds** — use it as-is on white/cream. |
 | `banner.png` | The homepage illustration, 9569×3295. |
+| `logo-lockup-horizontal.svg` | Icon + "For&Chips" + "digital forensic" + flag, on one line (799×193). Mirrors the site header. |
+| `logo-lockup-stacked.svg` | Icon + "For&" over "Chips", no subtitle (389×216). |
+
+The two lockups are **composed** from the logo master and the Atelia webfont by
+`scripts/brand_lockups.py`, but live here because everything else derives from
+them. Their text is converted to **outlines**, so they render correctly on
+machines without Atelia installed (LinkedIn, print, other designers).
+
+```bash
+uv run --with 'fonttools[woff]' --with brotli --with uharfbuzz \
+    python scripts/brand_lockups.py
+```
+
+Tunable constants at the top of that script: `LEAN` / `LEAN_STACKED` (how
+closely the chip leans on the F) and the subtitle offset. Two things it gets
+right that are easy to miss — Atelia's cap height is 0.7 em, so the title is
+set at `icon_height / 0.7` for the F to match the icon; and each glyph's left
+side bearing is subtracted from the gap so the *ink* lands where intended.
 
 `brand/masters/` is mounted into Hugo's asset pipeline as `assets/brand`
 (see `module.mounts` in `config/_default/hugo.yaml`), so the site derives its
@@ -70,6 +91,29 @@ magick /tmp/l.png -background "$BG" -gravity center -extent ${SIZE}x${SIZE} out.
 
 # Dark-background vector — swap the ink only
 sed 's/fill:#1A1204/fill:#EEEAD8/' brand/masters/logo_4nchips.svg > logo-on-dark.svg
+```
+
+## exports/lockup/
+
+| File | Use |
+|---|---|
+| `logo-lockup-{horizontal,stacked}-1200-cream.png` | Light backgrounds |
+| `logo-lockup-{horizontal,stacked}-1200-dark.png` | Dark backgrounds |
+| `logo-lockup-{horizontal,stacked}-1200-transparent.png` | Place over any background |
+| `logo-lockup-{horizontal,stacked}-on-dark.svg` | Vector, cream ink |
+
+Horizontal suits email signatures, slide footers and wide profile headers;
+stacked suits square-ish placements. 1200px wide covers every social use —
+scale down, never up.
+
+```bash
+# Raster at any width, on a brand background or transparent
+rsvg-convert -w 1200 brand/masters/logo-lockup-horizontal.svg -o out.png
+magick out.png -background '#F7F5F0' -flatten out-cream.png
+
+# Dark-background vector — the ink appears as both style: and fill=
+sed -e 's/fill:#1A1204/fill:#EEEAD8/g' -e 's/fill="#1A1204"/fill="#EEEAD8"/g' \
+    brand/masters/logo-lockup-horizontal.svg > logo-lockup-horizontal-on-dark.svg
 ```
 
 ## exports/banner/
