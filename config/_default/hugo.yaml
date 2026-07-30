@@ -5,6 +5,19 @@ theme: "PaperMod"
 
 enableRobotsTXT: true
 
+# The brand masters (logo + banner) live in brand/masters/ as the single
+# source of truth. Mounting them into assets/ lets Hugo derive the site's
+# banner variants and social card from the same originals we export the
+# platform assets from, without duplicating a 25 MB file.
+# Declaring any mount replaces Hugo's defaults for that target, so the normal
+# assets/ directory is listed explicitly alongside it.
+module:
+  mounts:
+    - source: assets
+      target: assets
+    - source: brand/masters
+      target: assets/brand
+
 params:
   # env is set per environment: config/production/hugo.yaml → "production",
   # config/demo/hugo.yaml → "demo". Anything but "production" makes PaperMod
@@ -46,7 +59,7 @@ params:
   # own cover — the homepage, list pages and coverless articles. Path is
   # relative to assets/; it is cropped to 1200x630 at build time.
   # Without this, LinkedIn and X render a blank preview card.
-  defaultSocialImage: "images/homepage/banner.png"
+  defaultSocialImage: "brand/banner.png"
 
   authors:
     showCollabGraph: true

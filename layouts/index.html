@@ -25,7 +25,7 @@
 
 {{- /* Source is a 9569×3295 raw PNG (~26 MB) — never ship it as-is.
        Resized WebP variants; browsers pick per viewport/DPR via srcset. */}}
-{{- $raw := resources.Get "images/homepage/banner.png" }}
+{{- $raw := resources.Get "brand/banner.png" }}
 {{- $w1 := $raw.Resize "960x webp q85" }}
 {{- $w2 := $raw.Resize "1920x webp q85" }}
 {{- $w3 := $raw.Resize "2880x webp q80" }}
