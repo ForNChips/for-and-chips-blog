@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 340" width="320" height="340">
+  <rect width="320" height="340" fill="#ffffff"/>
+  <g stroke="#1f3d57" fill="none" stroke-width="2">
+    <path d="M121.6 10 L121.6 187.00000000000003 Q 121.6 265.2 48.0 272.0 L10 278.8"/>
+    <path d="M198.4 10 L198.4 176.8 Q 198.4 323.0 64.0 326.4 L10 326.4"/>
+    <path d="M160.0 20 L160.0 187.00000000000003 Q 160.0 292.4 57.599999999999994 299.2 L12 302.6" stroke-dasharray="10 10"/>
+    <path d="M230.39999999999998 210.8 L275.2 340" stroke-dasharray="14 8"/>
+  </g>
+  <rect x="117" y="120" width="78" height="150" fill="#9dbcd4" opacity="0.55"/>
+  <path d="M160.0 132 l0 70" stroke="#1f5b8a" stroke-width="6" marker-end="url(#ab)"/>
+  <defs><marker id="ab" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto">
+    <path d="M0 0 L4 8 L8 0 Z" fill="#1f5b8a"/></marker></defs>
+  <text x="19.2" y="40.8" font-family="Georgia, serif" font-size="20" fill="#1f3d57">(b)</text>
+</svg>
