@@ -16,7 +16,7 @@ these two files.**
 
 | File | What it is |
 |---|---|
-| `logo_4nchips.svg` | The logo, vector, 731×1142 (aspect 0.642), in its light-mode colours. |
+| `logo_4nchips.svg` | The logo, vector, 731×1142 (aspect 0.642). Coloured for **light backgrounds** — use it as-is on white/cream. |
 | `banner.png` | The homepage illustration, 9569×3295. |
 
 `brand/masters/` is mounted into Hugo's asset pipeline as `assets/brand`
@@ -45,8 +45,7 @@ stays consistent instead of re-cropping per site.
 | `github-avatar-500-*.png` | 500×500 | GitHub organisation avatar |
 | `og-default-1200x630.jpg` | 1200×630 | Reference copy of the social card |
 | `banner-3840.webp` | 3840 wide | Optimised banner for slide decks / press use |
-| `logo-on-light.svg` | vector | Logo recoloured for light backgrounds (`#1A1204`) |
-| `logo-on-dark.svg` | vector | Logo recoloured for dark backgrounds (`#EEEAD8`) |
+| `logo-on-dark.svg` | vector | The **only** recolour needed: the master's `#1A1204` ink swapped for `#EEEAD8` so it reads on dark backgrounds |
 | `favicon-48x48.png` | 48×48 | Build input for the multi-resolution `favicon.ico` |
 
 `-dark` = for dark backgrounds, `-cream` = for light backgrounds.
