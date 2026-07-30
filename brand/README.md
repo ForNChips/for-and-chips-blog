@@ -11,13 +11,18 @@ convert). No AI-generated imagery.
 
 ## masters/
 
+**Only true originals live here — everything else in the repo derives from
+these two files.**
+
 | File | What it is |
 |---|---|
-| `logo_4nchips.svg` | **The source of truth.** Vector, 731×1142, aspect 0.642. |
-| `logo-on-light.svg` | Variant for light backgrounds — the themed fill recoloured to `#1A1204`. |
-| `logo-on-dark.svg` | Variant for dark backgrounds — the themed fill recoloured to `#EEEAD8`. |
-| `favicon-48x48.png` | Build input for the multi-resolution `favicon.ico`, not served on its own. |
-| `legacy_logo_4nchips_*.svg` | Earlier variants of unknown origin, kept for reference. Prefer the master above. |
+| `logo_4nchips.svg` | The logo, vector, 731×1142 (aspect 0.642), in its light-mode colours. |
+| `banner.png` | The homepage illustration, 9569×3295. |
+
+`brand/masters/` is mounted into Hugo's asset pipeline as `assets/brand`
+(see `module.mounts` in `config/_default/hugo.yaml`), so the site derives its
+banner WebP variants and its social card straight from the master instead of
+keeping a second 25 MB copy. Referenced in templates as `brand/banner.png`.
 
 The site itself does **not** load these files: `layouts/partials/logo.html`
 inlines the SVG markup and recolours it at runtime through the `--logo-white`
@@ -39,7 +44,10 @@ stays consistent instead of re-cropping per site.
 | `bmc-cover-1500x500.jpg` | 1500×500 | Buy Me a Coffee cover |
 | `github-avatar-500-*.png` | 500×500 | GitHub organisation avatar |
 | `og-default-1200x630.jpg` | 1200×630 | Reference copy of the social card |
-| `banner-3840.webp` | 3840 wide | Optimised banner master |
+| `banner-3840.webp` | 3840 wide | Optimised banner for slide decks / press use |
+| `logo-on-light.svg` | vector | Logo recoloured for light backgrounds (`#1A1204`) |
+| `logo-on-dark.svg` | vector | Logo recoloured for dark backgrounds (`#EEEAD8`) |
+| `favicon-48x48.png` | 48×48 | Build input for the multi-resolution `favicon.ico` |
 
 `-dark` = for dark backgrounds, `-cream` = for light backgrounds.
 
@@ -55,4 +63,3 @@ here is a reference copy, not what the site serves.
   `config/_default/hugo.yaml` and `static/site.webmanifest`; moving them
   breaks the site.
 - `assets/images/logos/swiss_flag.svg` — used by the header partial.
-- `assets/images/homepage/banner.png` — the banner master Hugo processes.
