@@ -33,13 +33,13 @@ tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
 square() {  # square <size> <bg> <outfile>
   local size=$1 bg=$2 out=$3
   rsvg-convert -h $(( size * LOGO_PCT / 100 )) "$LOGO" -o "$tmp/l.png"
-  magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" "$out"
+  magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" -strip "$out"
 }
 
 # ── Banner: full-bleed centre crop to the target aspect ─────────────────
 crop() {    # crop <WxH> <outfile> [quality]
   local wh=$1 out=$2 q=${3:-85}
-  magick "$BANNER" -resize "${wh}^" -gravity center -extent "$wh" -quality "$q" "$out"
+  magick "$BANNER" -resize "${wh}^" -gravity center -extent "$wh" -quality "$q" -strip "$out"
 }
 
 echo "logo → $OUT_LOGO"
@@ -52,8 +52,28 @@ square 500  "$DARK"  "$OUT_LOGO/github-avatar-500-dark.png"
 # Dark-background variant of the vector: swap only the ink colour.
 sed "s/fill:${INK}/fill:${CREAM_INK}/" "$LOGO" > "$OUT_LOGO/logo-on-dark.svg"
 
+# ── Lockups: icon + wordmark, composed by scripts/brand_lockups.py ─────
+OUT_LOCKUP=brand/exports/lockup
+mkdir -p "$OUT_LOCKUP"
+echo "lockups → $OUT_LOCKUP"
+for name in horizontal stacked; do
+  src="brand/masters/logo-lockup-${name}.svg"
+  dark_svg="$OUT_LOCKUP/logo-lockup-${name}-on-dark.svg"
+  # Swap the ink for dark backgrounds. The lockups carry it in both forms:
+  # style="fill:#…" inside the nested logo, fill="#…" on the text groups.
+  sed -e "s/fill:${INK}/fill:${CREAM_INK}/g" \
+      -e "s/fill=\"${INK}\"/fill=\"${CREAM_INK}\"/g" "$src" > "$dark_svg"
+
+  W=1200
+  rsvg-convert -w $W "$src"      -o "$tmp/lk.png"
+  rsvg-convert -w $W "$dark_svg" -o "$tmp/lkd.png"
+  magick "$tmp/lk.png" -strip                "$OUT_LOCKUP/logo-lockup-${name}-${W}-transparent.png"
+  magick "$tmp/lk.png"  -background "$CREAM" -flatten -strip "$OUT_LOCKUP/logo-lockup-${name}-${W}-cream.png"
+  magick "$tmp/lkd.png" -background "$DARK"  -flatten -strip "$OUT_LOCKUP/logo-lockup-${name}-${W}-dark.png"
+done
+
 echo "banner → $OUT_BANNER"
-magick "$BANNER" -resize 3840x -quality 85 "$OUT_BANNER/banner-3840.webp"
+magick "$BANNER" -resize 3840x -quality 85 -strip "$OUT_BANNER/banner-3840.webp"
 crop 1200x630 "$OUT_BANNER/og-default-1200x630.jpg"
 crop 1200x627 "$OUT_BANNER/linkedin-post-1200x627.jpg"
 crop 4200x700 "$OUT_BANNER/linkedin-cover-4200x700.jpg"
@@ -68,7 +88,7 @@ cp "$tmp/f-32.png"  "$FAV/favicon-32x32.png"
 cp "$tmp/f-180.png" "$FAV/apple-touch-icon.png"
 cp "$tmp/f-192.png" "$FAV/icon-192.png"
 cp "$tmp/f-512.png" "$FAV/icon-512.png"
-magick "$tmp/f-16.png" "$tmp/f-32.png" "$tmp/f-48.png" "$FAV/favicon.ico"
+magick "$tmp/f-16.png" "$tmp/f-32.png" "$tmp/f-48.png" -strip "$FAV/favicon.ico"
 # Safari pinned tab: flat monochrome silhouette (Safari recolours it itself).
 sed -E 's/fill:#[0-9a-fA-F]{6}/fill:#000000/g' "$LOGO" > "$FAV/safari-pinned-tab.svg"
 
