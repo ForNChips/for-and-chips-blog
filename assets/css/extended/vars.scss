@@ -77,7 +77,10 @@ body {
     --color-linkedin: #0073b1;
     --text-muted: #888880;
     --button-text: #ffffff;
-    --logo-white:  #1A1204;           /* logo white areas → dark in light mode */
+    /* Ink of the logo's themed path. The master SVG already carries this
+       value, so light mode simply matches it; dark mode lifts it to cream.
+       (Named --logo-white for historical reasons: the path used to be white.) */
+    --logo-white:  #1A1204;
     /* Panel surfaces (abstract, source-path, home concept cards). They follow
        the theme like .citation-block does — white on cream here, dark in dark
        mode — instead of staying light in both. Kept as aliases so the panels
