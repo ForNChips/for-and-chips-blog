@@ -30,10 +30,16 @@ mkdir -p "$OUT_LOGO" "$OUT_BANNER" "$FAV"
 tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
 
 # ── Logo: square canvas, logo centred at LOGO_PCT of the side ───────────
+#
+# -type TrueColorAlpha / png:color-type=6 force 32-bit RGBA. Without them
+# ImageMagick palette-optimises these few-colour icons down to an 8-bit
+# colormap, and Safari silently refuses to render 8-bit .ico frames (Chrome
+# and Firefox accept them, so the breakage only shows up in Safari).
 square() {  # square <size> <bg> <outfile>
   local size=$1 bg=$2 out=$3
   rsvg-convert -h $(( size * LOGO_PCT / 100 )) "$LOGO" -o "$tmp/l.png"
-  magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" -strip "$out"
+  magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" \
+         -type TrueColorAlpha -define png:color-type=6 -strip "$out"
 }
 
 # ── Banner: full-bleed centre crop to the target aspect ─────────────────
@@ -88,7 +94,7 @@ cp "$tmp/f-32.png"  "$FAV/favicon-32x32.png"
 cp "$tmp/f-180.png" "$FAV/apple-touch-icon.png"
 cp "$tmp/f-192.png" "$FAV/icon-192.png"
 cp "$tmp/f-512.png" "$FAV/icon-512.png"
-magick "$tmp/f-16.png" "$tmp/f-32.png" "$tmp/f-48.png" -strip "$FAV/favicon.ico"
+magick "$tmp/f-16.png" "$tmp/f-32.png" "$tmp/f-48.png" -type TrueColorAlpha -strip "$FAV/favicon.ico"
 # Safari pinned tab: flat monochrome silhouette (Safari recolours it itself).
 sed -E 's/fill:#[0-9a-fA-F]{6}/fill:#000000/g' "$LOGO" > "$FAV/safari-pinned-tab.svg"
 
