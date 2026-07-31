@@ -21,6 +21,7 @@ DARK='#1F1F1F'     # --theme, dark palette
 INK='#1A1204'      # logo ink in the master
 CREAM_INK='#EEEAD8'
 LOGO_PCT=83        # logo occupies this % of a square canvas
+ROUND_PCT=18       # favicon corner radius, as % of the icon side
 
 OUT_LOGO=brand/exports/logo
 OUT_BANNER=brand/exports/banner
@@ -40,6 +41,15 @@ square() {  # square <size> <bg> <outfile>
   rsvg-convert -h $(( size * LOGO_PCT / 100 )) "$LOGO" -o "$tmp/l.png"
   magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" \
          -type TrueColorAlpha -define png:color-type=6 -strip "$out"
+}
+
+# ── Rounded corners: mask the square with a rounded rectangle ──────────
+round_corners() {  # round_corners <file> <size>
+  local f=$1 s=$2 r=$(( s * ROUND_PCT / 100 ))
+  magick -size "${s}x${s}" xc:none \
+         -draw "roundrectangle 0,0,$((s-1)),$((s-1)),${r},${r}" "$tmp/mask.png"
+  magick "$f" "$tmp/mask.png" -alpha set -compose DstIn -composite \
+         -type TrueColorAlpha -define png:color-type=6 -strip "$f"
 }
 
 # ── Banner: full-bleed centre crop to the target aspect ─────────────────
@@ -86,9 +96,13 @@ crop 4200x700 "$OUT_BANNER/linkedin-cover-4200x700.jpg"
 crop 1500x500 "$OUT_BANNER/bmc-cover-1500x500.jpg"
 
 echo "favicons → $FAV"
-for s in 16 32 48 180 192 512; do
+for s in 16 32 48 192 512; do
   square "$s" "$CREAM" "$tmp/f-$s.png"
+  round_corners "$tmp/f-$s.png" "$s"
 done
+# apple-touch-icon stays a full square on purpose: iOS applies its own rounded
+# mask, so pre-rounding it shows a smaller radius nested inside Apple's.
+square 180 "$CREAM" "$tmp/f-180.png"
 cp "$tmp/f-16.png"  "$FAV/favicon-16x16.png"
 cp "$tmp/f-32.png"  "$FAV/favicon-32x32.png"
 cp "$tmp/f-180.png" "$FAV/apple-touch-icon.png"
