@@ -22,6 +22,11 @@ INK='#1A1204'      # logo ink in the master
 CREAM_INK='#EEEAD8'
 LOGO_PCT=83        # logo occupies this % of a square canvas
 ROUND_PCT=18       # favicon corner radius, as % of the icon side
+# Browser-tab favicons crop to the head: the full figure is 0.64:1, so squeezing
+# it into a 16px square makes an unreadable smudge. Coordinates are within a
+# 641x1000 render of the master.
+HEAD_RENDER_H=1000
+HEAD_CROP=500x500+70+10
 
 OUT_LOGO=brand/exports/logo
 OUT_BANNER=brand/exports/banner
@@ -40,6 +45,15 @@ square() {  # square <size> <bg> <outfile>
   local size=$1 bg=$2 out=$3
   rsvg-convert -h $(( size * LOGO_PCT / 100 )) "$LOGO" -o "$tmp/l.png"
   magick "$tmp/l.png" -background "$bg" -gravity center -extent "${size}x${size}" \
+         -type TrueColorAlpha -define png:color-type=6 -strip "$out"
+}
+
+# ── Head crop: the character's head + hat, for small tab icons ─────────
+head_square() {  # head_square <size> <bg> <outfile>
+  local size=$1 bg=$2 out=$3
+  rsvg-convert -h "$HEAD_RENDER_H" "$LOGO" -o "$tmp/hfull.png"
+  magick "$tmp/hfull.png" -crop "$HEAD_CROP" +repage -background "$bg" -flatten \
+         -resize "${size}x${size}" \
          -type TrueColorAlpha -define png:color-type=6 -strip "$out"
 }
 
@@ -96,7 +110,13 @@ crop 4200x700 "$OUT_BANNER/linkedin-cover-4200x700.jpg"
 crop 1500x500 "$OUT_BANNER/bmc-cover-1500x500.jpg"
 
 echo "favicons → $FAV"
-for s in 16 32 48 192 512; do
+# Tab icons: head crop, so they stay legible at 16px.
+for s in 16 32 48; do
+  head_square "$s" "$CREAM" "$tmp/f-$s.png"
+  round_corners "$tmp/f-$s.png" "$s"
+done
+# App icons: the full figure has room to read at these sizes.
+for s in 192 512; do
   square "$s" "$CREAM" "$tmp/f-$s.png"
   round_corners "$tmp/f-$s.png" "$s"
 done

@@ -146,7 +146,20 @@ copy for manual use, not what the site serves.
 
 `static/logos/favicons/` holds the 7 files the site serves. Paths are wired in
 `config/_default/hugo.yaml` and `static/site.webmanifest` — moving them breaks
-the site — but they are still *derived*, so `brand_export.sh` regenerates them:
+the site — but they are still *derived*, so `brand_export.sh` regenerates them.
+
+Three deliberate choices, each with a reason:
+
+| Icon | Treatment | Why |
+|---|---|---|
+| 16 / 32 / 48 + `.ico` | **Head crop**, rounded | The full figure is 0.64:1; squeezed into 16px it is an unreadable smudge. |
+| `icon-192` / `icon-512` | Full figure, rounded | Enough room for the whole character to read. |
+| `apple-touch-icon` | Full figure, **square** | iOS applies its own rounded mask; pre-rounding nests a second, smaller radius inside it. |
+
+All icons are forced to **32-bit RGBA**. ImageMagick otherwise palette-optimises
+them to an 8-bit colormap, and **Safari silently refuses to render 8-bit `.ico`
+frames** — Chrome and Firefox accept them, so the breakage only appears in
+Safari.
 
 ```bash
 # Same square recipe as the avatars, at 16/32/48/180/192/512
