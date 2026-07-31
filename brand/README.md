@@ -18,6 +18,7 @@ brand/
 └── exports/
     ├── logo/         square avatars + the dark-background vector
     ├── lockup/       icon + wordmark, light/dark/transparent
+    ├── favicon/      copies of every served icon + the uncropped alternates
     └── banner/       wide covers, social cards, optimised banner
 ```
 
@@ -115,6 +116,23 @@ magick out.png -background '#F7F5F0' -flatten out-cream.png
 sed -e 's/fill:#1A1204/fill:#EEEAD8/g' -e 's/fill="#1A1204"/fill="#EEEAD8"/g' \
     brand/masters/logo-lockup-horizontal.svg > logo-lockup-horizontal-on-dark.svg
 ```
+
+## exports/favicon/
+
+Reference copies of every icon the site serves, so the whole visual identity
+sits in one place. These are **copies** — the live files are in
+`static/logos/favicons/` and `brand_export.sh` writes both, byte-identical.
+
+Small sizes ship in **both treatments** so the choice stays visible:
+
+| File | Treatment |
+|---|---|
+| `favicon-{16x16,32x32,48x48}.png` | Head crop — what the site serves |
+| `favicon-{16x16,32x32,48x48}-full-figure.png` | Whole character — the alternative |
+| `favicon.ico` | Multi-resolution 16/32/48, head crop |
+| `icon-192.png`, `icon-512.png` | Full figure, rounded |
+| `apple-touch-icon.png` | Full figure, square |
+| `safari-pinned-tab.svg` | Flat black silhouette |
 
 ## exports/banner/
 
