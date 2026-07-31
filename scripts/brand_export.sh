@@ -31,7 +31,8 @@ HEAD_CROP=500x500+70+10
 OUT_LOGO=brand/exports/logo
 OUT_BANNER=brand/exports/banner
 FAV=static/logos/favicons
-mkdir -p "$OUT_LOGO" "$OUT_BANNER" "$FAV"
+OUT_FAVICON=brand/exports/favicon
+mkdir -p "$OUT_LOGO" "$OUT_BANNER" "$FAV" "$OUT_FAVICON"
 
 tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
 
@@ -109,11 +110,15 @@ crop 1200x627 "$OUT_BANNER/linkedin-post-1200x627.jpg"
 crop 4200x700 "$OUT_BANNER/linkedin-cover-4200x700.jpg"
 crop 1500x500 "$OUT_BANNER/bmc-cover-1500x500.jpg"
 
-echo "favicons → $FAV"
-# Tab icons: head crop, so they stay legible at 16px.
+echo "favicons → $FAV (reference copies → $OUT_FAVICON)"
+# Tab icons: head crop, so they stay legible at 16px. The uncropped figure is
+# also exported at the same sizes so both options sit side by side in brand/.
 for s in 16 32 48; do
   head_square "$s" "$CREAM" "$tmp/f-$s.png"
   round_corners "$tmp/f-$s.png" "$s"
+  square "$s" "$CREAM" "$tmp/full-$s.png"
+  round_corners "$tmp/full-$s.png" "$s"
+  cp "$tmp/full-$s.png" "$OUT_FAVICON/favicon-${s}x${s}-full-figure.png"
 done
 # App icons: the full figure has room to read at these sizes.
 for s in 192 512; do
@@ -131,5 +136,12 @@ cp "$tmp/f-512.png" "$FAV/icon-512.png"
 magick "$tmp/f-16.png" "$tmp/f-32.png" "$tmp/f-48.png" -type TrueColorAlpha -strip "$FAV/favicon.ico"
 # Safari pinned tab: flat monochrome silhouette (Safari recolours it itself).
 sed -E 's/fill:#[0-9a-fA-F]{6}/fill:#000000/g' "$LOGO" > "$FAV/safari-pinned-tab.svg"
+
+# Reference copies of everything the site serves, so brand/ holds the whole
+# visual identity without anyone having to dig through static/.
+cp "$FAV"/favicon.ico "$FAV"/favicon-16x16.png "$FAV"/favicon-32x32.png \
+   "$FAV"/apple-touch-icon.png "$FAV"/icon-192.png "$FAV"/icon-512.png \
+   "$FAV"/safari-pinned-tab.svg "$OUT_FAVICON/"
+cp "$tmp/f-48.png" "$OUT_FAVICON/favicon-48x48.png"   # .ico frame, not served alone
 
 echo "done."
